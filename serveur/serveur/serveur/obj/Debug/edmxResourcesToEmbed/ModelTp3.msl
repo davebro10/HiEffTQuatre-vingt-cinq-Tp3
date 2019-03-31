@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="minedexf_tp3ModelStoreContainer" CdmEntityContainer="minedexf_tp3Entities">
+    <EntitySetMapping Name="client">
+      <EntityTypeMapping TypeName="minedexf_tp3Model.client">
+        <MappingFragment StoreEntitySet="client">
+          <ScalarProperty Name="id_client" ColumnName="id_client" />
+          <ScalarProperty Name="nom" ColumnName="nom" />
+          <ScalarProperty Name="usager" ColumnName="usager" />
+          <ScalarProperty Name="motdepasse" ColumnName="motdepasse" />
+          <ScalarProperty Name="action" ColumnName="action" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="fichier">
+      <EntityTypeMapping TypeName="minedexf_tp3Model.fichier">
+        <MappingFragment StoreEntitySet="fichier">
+          <ScalarProperty Name="id_fichier" ColumnName="id_fichier" />
+          <ScalarProperty Name="id_groupe_fk" ColumnName="id_groupe_fk" />
+          <ScalarProperty Name="nom" ColumnName="nom" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="groupe">
+      <EntityTypeMapping TypeName="minedexf_tp3Model.groupe">
+        <MappingFragment StoreEntitySet="groupe">
+          <ScalarProperty Name="id_groupe" ColumnName="id_groupe" />
+          <ScalarProperty Name="admin" ColumnName="admin" />
+          <ScalarProperty Name="nom" ColumnName="nom" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="invitation">
+      <EntityTypeMapping TypeName="minedexf_tp3Model.invitation">
+        <MappingFragment StoreEntitySet="invitation">
+          <ScalarProperty Name="id_invitation" ColumnName="id_invitation" />
+          <ScalarProperty Name="id_groupe_fk" ColumnName="id_groupe_fk" />
+          <ScalarProperty Name="id_client_fk" ColumnName="id_client_fk" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="liste_groupe_client" TypeName="minedexf_tp3Model.liste_groupe_client" StoreEntitySet="liste_groupe_client">
+      <EndProperty Name="client">
+        <ScalarProperty Name="id_client" ColumnName="id_client_fk" />
+      </EndProperty>
+      <EndProperty Name="groupe">
+        <ScalarProperty Name="id_groupe" ColumnName="id_groupe_fk" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

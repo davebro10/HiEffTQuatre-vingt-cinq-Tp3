@@ -1,0 +1,7 @@
+Serveur BD : ni-web-01.srv.nihost.fr
+Nom BD : minedexf_tp3
+Nom user : minedexf_utp3
+Mdp user :!TP3BD18!
+
+PhpMyAdmin
+https://ni-web-01.srv.nihost.fr:2083/cpsess3193510239/3rdparty/phpMyAdmin/index.php

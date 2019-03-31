@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e1469f75eb084583bbe418542ab665d7" Name="Diagram1">
+        <EntityTypeShape EntityType="minedexf_tp3Model.client" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="minedexf_tp3Model.fichier" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="minedexf_tp3Model.groupe" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="minedexf_tp3Model.invitation" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="minedexf_tp3Model.fk_groupe_client1" ManuallyRouted="false" />
+        <AssociationConnector Association="minedexf_tp3Model.fk_invitation_client1" ManuallyRouted="false" />
+        <AssociationConnector Association="minedexf_tp3Model.fk_fichier_groupe1" ManuallyRouted="false" />
+        <AssociationConnector Association="minedexf_tp3Model.fk_invitation_groupe1" ManuallyRouted="false" />
+        <AssociationConnector Association="minedexf_tp3Model.liste_groupe_client" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

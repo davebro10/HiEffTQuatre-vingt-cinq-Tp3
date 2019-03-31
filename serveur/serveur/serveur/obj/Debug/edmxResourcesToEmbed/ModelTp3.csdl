@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="minedexf_tp3Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="client">
+    <Key>
+      <PropertyRef Name="id_client" />
+    </Key>
+    <Property Name="id_client" Type="Int32" Nullable="false" />
+    <Property Name="nom" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+    <Property Name="usager" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+    <Property Name="motdepasse" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+    <Property Name="action" Type="DateTime" />
+    <NavigationProperty Name="groupe" Relationship="Self.fk_groupe_client1" FromRole="client" ToRole="groupe" />
+    <NavigationProperty Name="invitation" Relationship="Self.fk_invitation_client1" FromRole="client" ToRole="invitation" />
+    <NavigationProperty Name="groupe1" Relationship="Self.liste_groupe_client" FromRole="client" ToRole="groupe" />
+  </EntityType>
+  <EntityType Name="fichier">
+    <Key>
+      <PropertyRef Name="id_fichier" />
+    </Key>
+    <Property Name="id_fichier" Type="Int32" Nullable="false" />
+    <Property Name="id_groupe_fk" Type="Int32" Nullable="false" />
+    <Property Name="nom" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="groupe" Relationship="Self.fk_fichier_groupe1" FromRole="fichier" ToRole="groupe" />
+  </EntityType>
+  <EntityType Name="groupe">
+    <Key>
+      <PropertyRef Name="id_groupe" />
+    </Key>
+    <Property Name="id_groupe" Type="Int32" Nullable="false" />
+    <Property Name="admin" Type="Int32" Nullable="false" />
+    <Property Name="nom" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="client" Relationship="Self.fk_groupe_client1" FromRole="groupe" ToRole="client" />
+    <NavigationProperty Name="fichier" Relationship="Self.fk_fichier_groupe1" FromRole="groupe" ToRole="fichier" />
+    <NavigationProperty Name="invitation" Relationship="Self.fk_invitation_groupe1" FromRole="groupe" ToRole="invitation" />
+    <NavigationProperty Name="client1" Relationship="Self.liste_groupe_client" FromRole="groupe" ToRole="client" />
+  </EntityType>
+  <EntityType Name="invitation">
+    <Key>
+      <PropertyRef Name="id_invitation" />
+    </Key>
+    <Property Name="id_invitation" Type="Int32" Nullable="false" />
+    <Property Name="id_groupe_fk" Type="Int32" Nullable="false" />
+    <Property Name="id_client_fk" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="client" Relationship="Self.fk_invitation_client1" FromRole="invitation" ToRole="client" />
+    <NavigationProperty Name="groupe" Relationship="Self.fk_invitation_groupe1" FromRole="invitation" ToRole="groupe" />
+  </EntityType>
+  <Association Name="fk_groupe_client1">
+    <End Role="client" Type="Self.client" Multiplicity="1" />
+    <End Role="groupe" Type="Self.groupe" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="client">
+        <PropertyRef Name="id_client" />
+      </Principal>
+      <Dependent Role="groupe">
+        <PropertyRef Name="admin" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_invitation_client1">
+    <End Role="client" Type="Self.client" Multiplicity="1" />
+    <End Role="invitation" Type="Self.invitation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="client">
+        <PropertyRef Name="id_client" />
+      </Principal>
+      <Dependent Role="invitation">
+        <PropertyRef Name="id_client_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_fichier_groupe1">
+    <End Role="groupe" Type="Self.groupe" Multiplicity="1" />
+    <End Role="fichier" Type="Self.fichier" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="groupe">
+        <PropertyRef Name="id_groupe" />
+      </Principal>
+      <Dependent Role="fichier">
+        <PropertyRef Name="id_groupe_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_invitation_groupe1">
+    <End Role="groupe" Type="Self.groupe" Multiplicity="1" />
+    <End Role="invitation" Type="Self.invitation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="groupe">
+        <PropertyRef Name="id_groupe" />
+      </Principal>
+      <Dependent Role="invitation">
+        <PropertyRef Name="id_groupe_fk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="liste_groupe_client">
+    <End Role="client" Type="Self.client" Multiplicity="*" />
+    <End Role="groupe" Type="Self.groupe" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="minedexf_tp3Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="client" EntityType="Self.client" />
+    <EntitySet Name="fichier" EntityType="Self.fichier" />
+    <EntitySet Name="groupe" EntityType="Self.groupe" />
+    <EntitySet Name="invitation" EntityType="Self.invitation" />
+    <AssociationSet Name="fk_groupe_client1" Association="Self.fk_groupe_client1">
+      <End Role="client" EntitySet="client" />
+      <End Role="groupe" EntitySet="groupe" />
+    </AssociationSet>
+    <AssociationSet Name="fk_invitation_client1" Association="Self.fk_invitation_client1">
+      <End Role="client" EntitySet="client" />
+      <End Role="invitation" EntitySet="invitation" />
+    </AssociationSet>
+    <AssociationSet Name="fk_fichier_groupe1" Association="Self.fk_fichier_groupe1">
+      <End Role="groupe" EntitySet="groupe" />
+      <End Role="fichier" EntitySet="fichier" />
+    </AssociationSet>
+    <AssociationSet Name="fk_invitation_groupe1" Association="Self.fk_invitation_groupe1">
+      <End Role="groupe" EntitySet="groupe" />
+      <End Role="invitation" EntitySet="invitation" />
+    </AssociationSet>
+    <AssociationSet Name="liste_groupe_client" Association="Self.liste_groupe_client">
+      <End Role="client" EntitySet="client" />
+      <End Role="groupe" EntitySet="groupe" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
