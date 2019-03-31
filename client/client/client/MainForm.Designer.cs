@@ -32,6 +32,7 @@
             this.fichierToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ActivePanel = new System.Windows.Forms.Panel();
+            this.SynchronizeNow = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,6 +55,8 @@
             // 
             // editToolStripMenuItem
             // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.SynchronizeNow});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -67,6 +70,13 @@
             this.ActivePanel.Name = "ActivePanel";
             this.ActivePanel.Size = new System.Drawing.Size(602, 366);
             this.ActivePanel.TabIndex = 1;
+            // 
+            // SynchronizeNow
+            // 
+            this.SynchronizeNow.Name = "SynchronizeNow";
+            this.SynchronizeNow.Size = new System.Drawing.Size(180, 22);
+            this.SynchronizeNow.Text = "Synchroniser";
+            this.SynchronizeNow.Click += new System.EventHandler(this.SynchronizeNow_Click);
             // 
             // MainForm
             // 
@@ -91,6 +101,7 @@
         private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.Panel ActivePanel;
+        private System.Windows.Forms.ToolStripMenuItem SynchronizeNow;
     }
 }
 

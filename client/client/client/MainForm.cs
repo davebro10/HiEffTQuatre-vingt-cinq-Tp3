@@ -7,6 +7,8 @@ namespace client
 {
     public partial class MainForm : Form, ISynchronizable
     {
+        private const int SYNCHRONIZATION_PERIOD = 5000;
+
         private readonly HomePanel _homePanel;
         private readonly GroupPanel _groupPanel;
 
@@ -50,6 +52,8 @@ namespace client
             }
         }
 
+        private void SynchronizeNow_Click(object sender, EventArgs e) => Synchronize();
+
         public void Synchronize()
         {
 
@@ -74,7 +78,7 @@ namespace client
             {
                 Console.WriteLine(@"Synchronisation");
                 Synchronize();
-                Thread.Sleep(5000);
+                Thread.Sleep(SYNCHRONIZATION_PERIOD);
             }
         }
     }

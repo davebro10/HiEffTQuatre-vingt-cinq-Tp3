@@ -36,7 +36,7 @@
             this.DeleteButton = new System.Windows.Forms.Button();
             this.InviteButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.GroupName = new System.Windows.Forms.Label();
+            this.GroupNameLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // AdminNameLabel
@@ -64,6 +64,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.FileListView.Location = new System.Drawing.Point(6, 37);
+            this.FileListView.MultiSelect = false;
             this.FileListView.Name = "FileListView";
             this.FileListView.Size = new System.Drawing.Size(342, 332);
             this.FileListView.TabIndex = 3;
@@ -123,20 +124,21 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Administrateur :";
             // 
-            // GroupName
+            // GroupNameLabel
             // 
-            this.GroupName.AutoSize = true;
-            this.GroupName.Location = new System.Drawing.Point(3, 8);
-            this.GroupName.Name = "GroupName";
-            this.GroupName.Size = new System.Drawing.Size(100, 13);
-            this.GroupName.TabIndex = 8;
-            this.GroupName.Text = "NOM DU GROUPE";
+            this.GroupNameLabel.AutoSize = true;
+            this.GroupNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GroupNameLabel.Location = new System.Drawing.Point(3, 0);
+            this.GroupNameLabel.Name = "GroupNameLabel";
+            this.GroupNameLabel.Size = new System.Drawing.Size(136, 16);
+            this.GroupNameLabel.TabIndex = 8;
+            this.GroupNameLabel.Text = "NOM DU GROUPE";
             // 
             // GroupPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.GroupName);
+            this.Controls.Add(this.GroupNameLabel);
             this.Controls.Add(this.InviteButton);
             this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.ModifyButton);
@@ -145,7 +147,7 @@
             this.Controls.Add(this.MemberListBox);
             this.Controls.Add(this.AdminNameLabel);
             this.Controls.Add(this.label2);
-            this.Name = "GroupePanel";
+            this.Name = "GroupPanel";
             this.Size = new System.Drawing.Size(477, 401);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -162,6 +164,6 @@
         private System.Windows.Forms.Button DeleteButton;
         private System.Windows.Forms.Button InviteButton;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label GroupName;
+        private System.Windows.Forms.Label GroupNameLabel;
     }
 }
