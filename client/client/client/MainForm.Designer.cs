@@ -87,10 +87,10 @@
 
     #endregion
 
-    private System.Windows.Forms.MenuStrip menuStrip1;
-    private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
-    private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
-    private System.Windows.Forms.Panel ActivePanel;
-  }
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fichierToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.Panel ActivePanel;
+    }
 }
 

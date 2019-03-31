@@ -32,7 +32,7 @@ namespace client
                         ActivePanel.Controls.Add(new HomePanel());
                         break;
                     case Panel.Groupe:
-                        ActivePanel.Controls.Add(new GroupePanel());
+                        ActivePanel.Controls.Add(new GroupPanel());
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
