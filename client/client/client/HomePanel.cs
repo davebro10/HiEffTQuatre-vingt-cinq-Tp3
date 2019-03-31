@@ -2,11 +2,16 @@
 
 namespace client
 {
-    public partial class HomePanel : UserControl
+    public partial class HomePanel : UserControl, ISynchronizable
     {
         public HomePanel()
         {
             InitializeComponent();
+        }
+
+        public void Synchronize()
+        {
+            //TODO
         }
     }
 }

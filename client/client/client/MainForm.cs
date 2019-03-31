@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace client
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, ISynchronizable
     {
+        private readonly HomePanel _homePanel;
+        private readonly GroupPanel _groupPanel;
+
         public enum Panel
         {
             Home,
@@ -16,7 +21,12 @@ namespace client
         public MainForm()
         {
             InitializeComponent();
+
+            _homePanel = new HomePanel();
+            _groupPanel = new GroupPanel();
             CurrentPanel = Panel.Groupe;
+
+            Task.Run(PeriodicSynchronization);
         }
 
         public Panel CurrentPanel
@@ -40,6 +50,32 @@ namespace client
             }
         }
 
+        public void Synchronize()
+        {
 
+            //TODO: Synchroniser les fichiers sur le disque
+
+            switch (CurrentPanel)
+            {
+                case Panel.Home:
+                    _homePanel.Synchronize();
+                    break;
+                case Panel.Groupe:
+                    _groupPanel.Synchronize();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public Task PeriodicSynchronization()
+        {
+            while (true)
+            {
+                Console.WriteLine(@"Synchronisation");
+                Synchronize();
+                Thread.Sleep(5000);
+            }
+        }
     }
 }
