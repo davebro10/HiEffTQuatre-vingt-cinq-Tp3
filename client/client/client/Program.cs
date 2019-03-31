@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace client
 {
-    static class Program
+  static class Program
     {
         /// <summary>
         /// Point d'entrée principal de l'application.
@@ -16,7 +13,7 @@ namespace client
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new frmMain());
+            Application.Run(new MainForm());
         }
     }
 }
