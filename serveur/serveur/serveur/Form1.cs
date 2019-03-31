@@ -30,6 +30,11 @@ namespace serveur
             dataGridViewInvitation.DataSource = _dbObj.invitation.ToList();
         }
 
+        private void addLog(String text)
+        {
+            lsbLog.Items.Add("[" + DateTime.Now.ToString("HH:mm") + "] " + text);
+        }
+
         /*
         private void initConnection()
         {
@@ -50,31 +55,49 @@ namespace serveur
         }
         */
 
-        private void addLog(String text)
-        {
-            lsbLog.Items.Add("["+DateTime.Now.ToString("HH:mm")+"] " + text);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //TEST
-            client client = new client();
-            client.nom = "test2";
-
-            _dbObj.client.Add(client);
-            _dbObj.SaveChanges();
-        }
-
-        private void btnModif_Click(object sender, EventArgs e)
-        {
-            client client = _dbObj.client.First(i => i.nom == "test2");
-            client.nom = "testModif";
-            _dbObj.SaveChanges();
-        }
-
         private void btnRefresh_Click(object sender, EventArgs e)
         {
             refreshGrid();
+        }
+
+        private void btnAjouterClient_Click(object sender, EventArgs e)
+        {
+            FrmClient dlg = new FrmClient(new client());
+            dlg.ShowDialog();
+            if (dlg.DialogResult == DialogResult.OK)
+            {
+                _dbObj.client.Add(dlg._client);
+                _dbObj.SaveChanges();
+            }
+        }
+
+        private void btnModifierClient_Click(object sender, EventArgs e)
+        {
+            if ( (dataGridViewClient.SelectedRows.Count == 1))
+            {
+                DataGridViewRow row = dataGridViewClient.SelectedRows[0];
+                client c = new client();
+                c.id_client = (int)row.Cells["id_client"].Value;
+                c.nom = (String)row.Cells["nom"].Value;
+                c.usager = (String)row.Cells["usager"].Value;
+                c.motdepasse = (String)row.Cells["motdepasse"].Value;
+
+                FrmClient dlg = new FrmClient(c);
+                dlg.ShowDialog();
+                if (dlg.DialogResult == DialogResult.OK)
+                {
+                    client cModif = _dbObj.client.First(i => i.id_client == dlg._client.id_client);
+                    cModif.nom = dlg._client.nom;
+                    cModif.usager = dlg._client.usager;
+                    cModif.motdepasse = dlg._client.motdepasse;
+                    _dbObj.SaveChanges();
+                    MessageBox.Show("Client modifié");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Il faut sélectionner une ligne dans la grille de Client.");
+            }
         }
     }
 }

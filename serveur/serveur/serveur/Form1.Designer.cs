@@ -41,19 +41,19 @@
             this.lblDgvGroupe = new System.Windows.Forms.Label();
             this.dataGridViewGroupe = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label2 = new System.Windows.Forms.Label();
-            this.btnRefresh = new System.Windows.Forms.Button();
-            this.lblDgvInvitation = new System.Windows.Forms.Label();
-            this.dataGridViewInvitation = new System.Windows.Forms.DataGridView();
+            this.btnAccepterInvitation = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.btnEnleverGroupe = new System.Windows.Forms.Button();
-            this.btnAccepterInvitation = new System.Windows.Forms.Button();
+            this.lblDgvInvitation = new System.Windows.Forms.Label();
+            this.dataGridViewInvitation = new System.Windows.Forms.DataGridView();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnRefresh = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClient)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGroupe)).BeginInit();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInvitation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInvitation)).BeginInit();
             this.SuspendLayout();
             // 
             // lsbLog
@@ -79,18 +79,18 @@
             this.btnAjouterClient.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAjouterClient.Location = new System.Drawing.Point(297, 34);
             this.btnAjouterClient.Name = "btnAjouterClient";
-            this.btnAjouterClient.Size = new System.Drawing.Size(94, 23);
+            this.btnAjouterClient.Size = new System.Drawing.Size(152, 23);
             this.btnAjouterClient.TabIndex = 3;
             this.btnAjouterClient.Text = "Ajouter Client";
             this.btnAjouterClient.UseVisualStyleBackColor = true;
-            this.btnAjouterClient.Click += new System.EventHandler(this.button1_Click);
+            this.btnAjouterClient.Click += new System.EventHandler(this.btnAjouterClient_Click);
             // 
             // btnSupprimerClient
             // 
             this.btnSupprimerClient.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSupprimerClient.Location = new System.Drawing.Point(297, 89);
             this.btnSupprimerClient.Name = "btnSupprimerClient";
-            this.btnSupprimerClient.Size = new System.Drawing.Size(94, 23);
+            this.btnSupprimerClient.Size = new System.Drawing.Size(152, 23);
             this.btnSupprimerClient.TabIndex = 4;
             this.btnSupprimerClient.Text = "Supprimer Client";
             this.btnSupprimerClient.UseVisualStyleBackColor = true;
@@ -100,7 +100,7 @@
             this.btnCreerGroupe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCreerGroupe.Location = new System.Drawing.Point(297, 228);
             this.btnCreerGroupe.Name = "btnCreerGroupe";
-            this.btnCreerGroupe.Size = new System.Drawing.Size(94, 23);
+            this.btnCreerGroupe.Size = new System.Drawing.Size(152, 23);
             this.btnCreerGroupe.TabIndex = 5;
             this.btnCreerGroupe.Text = "Créer Groupe";
             this.btnCreerGroupe.UseVisualStyleBackColor = true;
@@ -130,11 +130,11 @@
             this.btnModifierClient.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnModifierClient.Location = new System.Drawing.Point(297, 60);
             this.btnModifierClient.Name = "btnModifierClient";
-            this.btnModifierClient.Size = new System.Drawing.Size(94, 23);
+            this.btnModifierClient.Size = new System.Drawing.Size(152, 23);
             this.btnModifierClient.TabIndex = 8;
             this.btnModifierClient.Text = "Modifier Client";
             this.btnModifierClient.UseVisualStyleBackColor = true;
-            this.btnModifierClient.Click += new System.EventHandler(this.btnModif_Click);
+            this.btnModifierClient.Click += new System.EventHandler(this.btnModifierClient_Click);
             // 
             // dataGridViewClient
             // 
@@ -204,48 +204,15 @@
             this.panel1.Size = new System.Drawing.Size(864, 472);
             this.panel1.TabIndex = 13;
             // 
-            // label2
+            // btnAccepterInvitation
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(275, 12);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(188, 20);
-            this.label2.TabIndex = 14;
-            this.label2.Text = "Prévisualisation des listes";
-            // 
-            // btnRefresh
-            // 
-            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnRefresh.Location = new System.Drawing.Point(469, 12);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(110, 23);
-            this.btnRefresh.TabIndex = 15;
-            this.btnRefresh.Text = "Rafraichir";
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // lblDgvInvitation
-            // 
-            this.lblDgvInvitation.AutoSize = true;
-            this.lblDgvInvitation.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDgvInvitation.Location = new System.Drawing.Point(451, 205);
-            this.lblDgvInvitation.Name = "lblDgvInvitation";
-            this.lblDgvInvitation.Size = new System.Drawing.Size(147, 20);
-            this.lblDgvInvitation.TabIndex = 14;
-            this.lblDgvInvitation.Text = "Liste des invitations";
-            // 
-            // dataGridViewInvitation
-            // 
-            this.dataGridViewInvitation.AllowUserToAddRows = false;
-            this.dataGridViewInvitation.AllowUserToDeleteRows = false;
-            this.dataGridViewInvitation.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewInvitation.Location = new System.Drawing.Point(455, 228);
-            this.dataGridViewInvitation.MultiSelect = false;
-            this.dataGridViewInvitation.Name = "dataGridViewInvitation";
-            this.dataGridViewInvitation.ReadOnly = true;
-            this.dataGridViewInvitation.Size = new System.Drawing.Size(243, 150);
-            this.dataGridViewInvitation.TabIndex = 13;
+            this.btnAccepterInvitation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAccepterInvitation.Location = new System.Drawing.Point(703, 257);
+            this.btnAccepterInvitation.Name = "btnAccepterInvitation";
+            this.btnAccepterInvitation.Size = new System.Drawing.Size(147, 23);
+            this.btnAccepterInvitation.TabIndex = 18;
+            this.btnAccepterInvitation.Text = "Accepter invitation";
+            this.btnAccepterInvitation.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -274,20 +241,53 @@
             this.btnEnleverGroupe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEnleverGroupe.Location = new System.Drawing.Point(703, 63);
             this.btnEnleverGroupe.Name = "btnEnleverGroupe";
-            this.btnEnleverGroupe.Size = new System.Drawing.Size(111, 23);
+            this.btnEnleverGroupe.Size = new System.Drawing.Size(146, 23);
             this.btnEnleverGroupe.TabIndex = 15;
             this.btnEnleverGroupe.Text = "Enlever du groupe";
             this.btnEnleverGroupe.UseVisualStyleBackColor = true;
             // 
-            // btnAccepterInvitation
+            // lblDgvInvitation
             // 
-            this.btnAccepterInvitation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAccepterInvitation.Location = new System.Drawing.Point(703, 257);
-            this.btnAccepterInvitation.Name = "btnAccepterInvitation";
-            this.btnAccepterInvitation.Size = new System.Drawing.Size(146, 23);
-            this.btnAccepterInvitation.TabIndex = 18;
-            this.btnAccepterInvitation.Text = "Accepter invitation";
-            this.btnAccepterInvitation.UseVisualStyleBackColor = true;
+            this.lblDgvInvitation.AutoSize = true;
+            this.lblDgvInvitation.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDgvInvitation.Location = new System.Drawing.Point(451, 205);
+            this.lblDgvInvitation.Name = "lblDgvInvitation";
+            this.lblDgvInvitation.Size = new System.Drawing.Size(147, 20);
+            this.lblDgvInvitation.TabIndex = 14;
+            this.lblDgvInvitation.Text = "Liste des invitations";
+            // 
+            // dataGridViewInvitation
+            // 
+            this.dataGridViewInvitation.AllowUserToAddRows = false;
+            this.dataGridViewInvitation.AllowUserToDeleteRows = false;
+            this.dataGridViewInvitation.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewInvitation.Location = new System.Drawing.Point(455, 228);
+            this.dataGridViewInvitation.MultiSelect = false;
+            this.dataGridViewInvitation.Name = "dataGridViewInvitation";
+            this.dataGridViewInvitation.ReadOnly = true;
+            this.dataGridViewInvitation.Size = new System.Drawing.Size(243, 150);
+            this.dataGridViewInvitation.TabIndex = 13;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(275, 12);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(336, 20);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Prévisualisation des listes et tests de fonctions";
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRefresh.Location = new System.Drawing.Point(611, 12);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(110, 23);
+            this.btnRefresh.TabIndex = 15;
+            this.btnRefresh.Text = "Rafraichir";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
             // frmMain
             // 
@@ -305,8 +305,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGroupe)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInvitation)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInvitation)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
