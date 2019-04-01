@@ -11,11 +11,13 @@ namespace client
 
         private readonly HomePanel _homePanel;
         private readonly GroupPanel _groupPanel;
+        private readonly ConnectionPanel _connectionPanel;
 
         public enum Panel
         {
             Home,
-            Groupe
+            Groupe,
+            Connection
         }
 
         private Panel _panel;
@@ -46,6 +48,9 @@ namespace client
                     case Panel.Groupe:
                         ActivePanel.Controls.Add(new GroupPanel());
                         break;
+                    case Panel.Connection:
+                        ActivePanel.Controls.Add(new ConnectionPanel());
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -66,6 +71,8 @@ namespace client
                     break;
                 case Panel.Groupe:
                     _groupPanel.Synchronize();
+                    break;
+                case Panel.Connection:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
