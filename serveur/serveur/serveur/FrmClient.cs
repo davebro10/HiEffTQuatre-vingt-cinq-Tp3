@@ -1,4 +1,5 @@
-﻿using System;
+﻿using serveur.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,8 +13,9 @@ namespace serveur
 {
     public partial class FrmClient : Form
     {
-        public client _client { get; set; }
-        public FrmClient(client _client)
+        public Client _client { get; set; }
+
+        public FrmClient(Client _client)
         {
             this._client = _client;
             InitializeComponent();
