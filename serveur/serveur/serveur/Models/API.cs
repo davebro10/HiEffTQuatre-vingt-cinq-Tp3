@@ -140,6 +140,20 @@ namespace serveur.Models
             return ExecuteNonQuery(query, dic);
         }
 
+        private Client ReaderToClient(MySqlDataReader reader)
+        {
+            Client client = new Client
+            {
+                id_client = reader.GetInt32("id_client"),
+                nom = reader.GetString("nom"),
+                usager = reader.GetString("usager"),
+                motdepasse = reader.GetString("motdepasse"),
+                action = reader.GetDateTime("action")
+            };
+
+            return client;
+        }
+
         public Client GetClient(int id_client)
         {
             string query = "SELECT * FROM client WHERE id_client='@id_client'";
@@ -154,19 +168,10 @@ namespace serveur.Models
             {
                 return null;
             }
-
             reader.Read();
-            Client client = new Client
-            {
-                id_client = id_client,
-                nom = reader.GetString("nom"),
-                usager = reader.GetString("usager"),
-                motdepasse = reader.GetString("motdepasse"),
-                action = reader.GetDateTime("action")
-            };
-
+            Client client = ReaderToClient(reader);
+            reader.Dispose();
             return client;
-
         }
 
         public Client GetClient(string usager)
@@ -185,15 +190,8 @@ namespace serveur.Models
             }
 
             reader.Read();
-            Client client = new Client
-            {
-                id_client = reader.GetInt32("id_client"),
-                nom = reader.GetString("nom"),
-                usager = usager,
-                motdepasse = reader.GetString("motdepasse"),
-                action = reader.GetDateTime("action")
-            };
-
+            Client client = ReaderToClient(reader);
+            reader.Dispose();
             return client;
         }
 
@@ -251,6 +249,18 @@ namespace serveur.Models
             return ExecuteNonQuery(query, dic);
         }
 
+        private Groupe ReaderToGroup(MySqlDataReader reader)
+        {
+            Groupe groupe = new Groupe
+            {
+                id_groupe = reader.GetInt32("id_groupe"),
+                nom = reader.GetString("nom"),
+                admin = reader.GetInt32("admin")
+            };
+
+            return groupe;
+        }
+
         public Groupe GetGroupe(int id_groupe)
         {
             string query = "SELECT * FROM groupe WHERE id_groupe='@id_groupe'";
@@ -267,13 +277,8 @@ namespace serveur.Models
             }
 
             reader.Read();
-            Groupe groupe = new Groupe
-            {
-                id_groupe = id_groupe,
-                nom = reader.GetString("nom"),
-                admin = reader.GetInt32("admin")
-            };
-
+            Groupe groupe = ReaderToGroup(reader);
+            reader.Dispose();
             return groupe;
         }
 
