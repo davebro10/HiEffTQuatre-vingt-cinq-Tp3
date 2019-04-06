@@ -546,10 +546,17 @@ namespace serveur.Models
         }
 
         // Auth //
-        public bool Authentificate(string username, string password)
+        public Client Authentificate(string username, string password)
         {
             Client client = GetClient(username);
-            return client != null && client.motdepasse == password;
+            if (client != null && client.motdepasse == password)
+            {
+                return client;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

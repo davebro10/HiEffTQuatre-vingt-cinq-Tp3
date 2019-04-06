@@ -23,7 +23,7 @@ namespace serveur
         }
 
         [HttpPost]
-        // POST api/client/createclient/{c}
+        // POST api/client/createclient
         public bool CreateClient(Client c)
         {
             API api = new API();
@@ -31,7 +31,7 @@ namespace serveur
         }
 
         [HttpPost]
-        // POST api/client/modifyclient/{c}
+        // POST api/client/modifyclient
         public bool ModifyClient(Client c)
         {
             API api = new API();
@@ -39,7 +39,15 @@ namespace serveur
         }
 
         [HttpPost]
-        // POST api/client/deleteclient/{c}
+        // POST api/client/auth
+        public Client Auth(Client c)
+        {
+            API api = new API();
+            return api.Authentificate(c.usager,c.motdepasse);
+        }
+
+        [HttpDelete]
+        // DELETE api/client/deleteclient
         public bool DeleteClient(Client c)
         {
             API api = new API();
