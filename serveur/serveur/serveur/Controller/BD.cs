@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,10 @@ namespace serveur.Models
         {
             try
             {
-                _conn.Open();
+                if (_conn.State != ConnectionState.Open)
+                {
+                    _conn.Open();
+                }
                 return true;
             }
             catch (Exception ex)
@@ -43,7 +47,10 @@ namespace serveur.Models
         {
             try
             {
-                _conn.Close();
+                if (_conn.State != ConnectionState.Closed)
+                {
+                    _conn.Close();
+                }
                 return true;
             }
             catch (Exception ex)

@@ -41,6 +41,7 @@
             this.lblDgvGroupe = new System.Windows.Forms.Label();
             this.dataGridViewGroupe = new System.Windows.Forms.DataGridView();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnTest = new System.Windows.Forms.Button();
             this.btnAccepterInvitation = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -76,6 +77,7 @@
             // 
             // btnAjouterClient
             // 
+            this.btnAjouterClient.Enabled = false;
             this.btnAjouterClient.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAjouterClient.Location = new System.Drawing.Point(297, 34);
             this.btnAjouterClient.Name = "btnAjouterClient";
@@ -87,6 +89,7 @@
             // 
             // btnSupprimerClient
             // 
+            this.btnSupprimerClient.Enabled = false;
             this.btnSupprimerClient.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSupprimerClient.Location = new System.Drawing.Point(297, 89);
             this.btnSupprimerClient.Name = "btnSupprimerClient";
@@ -97,6 +100,7 @@
             // 
             // btnCreerGroupe
             // 
+            this.btnCreerGroupe.Enabled = false;
             this.btnCreerGroupe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCreerGroupe.Location = new System.Drawing.Point(297, 228);
             this.btnCreerGroupe.Name = "btnCreerGroupe";
@@ -107,6 +111,7 @@
             // 
             // btnAjoutClientGroupe
             // 
+            this.btnAjoutClientGroupe.Enabled = false;
             this.btnAjoutClientGroupe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAjoutClientGroupe.Location = new System.Drawing.Point(703, 34);
             this.btnAjoutClientGroupe.Name = "btnAjoutClientGroupe";
@@ -117,6 +122,7 @@
             // 
             // btnInviterClientGroupe
             // 
+            this.btnInviterClientGroupe.Enabled = false;
             this.btnInviterClientGroupe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInviterClientGroupe.Location = new System.Drawing.Point(704, 228);
             this.btnInviterClientGroupe.Name = "btnInviterClientGroupe";
@@ -127,6 +133,7 @@
             // 
             // btnModifierClient
             // 
+            this.btnModifierClient.Enabled = false;
             this.btnModifierClient.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnModifierClient.Location = new System.Drawing.Point(297, 60);
             this.btnModifierClient.Name = "btnModifierClient";
@@ -183,6 +190,7 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.btnTest);
             this.panel1.Controls.Add(this.btnAccepterInvitation);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Controls.Add(this.dataGridView1);
@@ -204,8 +212,20 @@
             this.panel1.Size = new System.Drawing.Size(864, 472);
             this.panel1.TabIndex = 13;
             // 
+            // btnTest
+            // 
+            this.btnTest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnTest.Location = new System.Drawing.Point(297, 400);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(152, 42);
+            this.btnTest.TabIndex = 19;
+            this.btnTest.Text = "TEST";
+            this.btnTest.UseVisualStyleBackColor = true;
+            this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
+            // 
             // btnAccepterInvitation
             // 
+            this.btnAccepterInvitation.Enabled = false;
             this.btnAccepterInvitation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnAccepterInvitation.Location = new System.Drawing.Point(703, 257);
             this.btnAccepterInvitation.Name = "btnAccepterInvitation";
@@ -238,6 +258,7 @@
             // 
             // btnEnleverGroupe
             // 
+            this.btnEnleverGroupe.Enabled = false;
             this.btnEnleverGroupe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnEnleverGroupe.Location = new System.Drawing.Point(703, 63);
             this.btnEnleverGroupe.Name = "btnEnleverGroupe";
@@ -301,6 +322,7 @@
             this.Controls.Add(this.lsbLog);
             this.Name = "frmMain";
             this.Text = "Serveur de fichier";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewClient)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGroupe)).EndInit();
             this.panel1.ResumeLayout(false);
@@ -335,6 +357,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btnEnleverGroupe;
         private System.Windows.Forms.Button btnAccepterInvitation;
+        private System.Windows.Forms.Button btnTest;
     }
 }
 

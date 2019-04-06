@@ -9,6 +9,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Owin.Hosting;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
 
 namespace serveur
 {
@@ -20,6 +24,21 @@ namespace serveur
         {
             InitializeComponent();
             _api = new API();
+
+            string baseAddress = "http://localhost:10281/";
+
+            // Start OWIN host
+            var webapp = WebApp.Start<Startup>(url: baseAddress);
+
+            HttpClient client = new HttpClient();
+
+            HttpResponseMessage response = client.GetAsync(baseAddress + "api/client/getallclient").Result;
+
+            Console.WriteLine(response);
+            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+
+            //webapp.Dispose();
+
             refreshGrid();
         }
 
@@ -74,6 +93,44 @@ namespace serveur
             {
                 MessageBox.Show("Il faut sélectionner une ligne dans la grille de Client.");
             }
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            string baseAddress = "http://localhost:10281/";
+
+            /* //Exemple GET
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(baseAddress + "api/client/getallclient").Result;
+
+            Console.WriteLine(response);
+            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+            */
+
+            /* //Exemple POST d'un Client
+            Client c = new Client();
+            c.nom = "test1";
+            c.usager = "test2";
+            c.motdepasse = "test3";
+            c.action = DateTime.Now;
+
+            HttpClient client = new HttpClient();
+            var jsonObj = JsonConvert.SerializeObject(c);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = client.PostAsync(baseAddress + "api/client/createclient", byteContent).Result;
+
+            Console.WriteLine(response);
+            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
+            */
+
         }
     }
 }
