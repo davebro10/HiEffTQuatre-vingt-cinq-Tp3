@@ -11,12 +11,14 @@ namespace client
         private MainForm mainFormRef;
         private ClientAPI clientAPI;
         private GroupeAPI groupeAPI;
+        private InvitationAPI invitationAPI;
 
         public HomePanel(MainForm reference)
         {
             mainFormRef = reference;
             clientAPI = new ClientAPI();
             groupeAPI = new GroupeAPI();
+            invitationAPI = new InvitationAPI();
 
             InitializeComponent();
             updateClientName();
@@ -31,20 +33,23 @@ namespace client
         }
 
         public void updateClientName() {
-            NomClientLabel.Text = mainFormRef.ActiveClient != null ? mainFormRef.ActiveClient.nom : "Anonyme";
+            Client activeClient = mainFormRef.ActiveClient;
+            NomClientLabel.Text = activeClient != null && activeClient.nom != null ? activeClient.nom : "Anonyme";
         }
 
         private async void fetchUserGroups()
         {
-            // TODO: check groups where only the user is currently a member
             GroupesListView.Items.Clear();
             List<Groupe> groups = await groupeAPI.getAllGroups();
             if (groups != null)
             {
                 foreach (Groupe group in groups)
                 {
-                    string[] rows = { group.id_groupe.ToString(), group.nom };
-                    GroupesListView.Items.Add(new ListViewItem(rows));
+                    List<Client> members = await invitationAPI.getGroupMembers(group.id_groupe);
+                    if (members.Contains(mainFormRef.ActiveClient)) {
+                        string[] rows = { group.id_groupe.ToString(), group.nom };
+                        GroupesListView.Items.Add(new ListViewItem(rows));
+                    }
                 }
             }
         }
@@ -63,9 +68,9 @@ namespace client
 
         private void VoirGroupeButton_Click(object sender, System.EventArgs e)
         {
-            // TODO: get group id and send group id to group panel
             if (GroupesListView.SelectedItems.Count == 1) {
                 int selectedGroup = Int32.Parse(GroupesListView.SelectedItems[0].Text);
+                // TODO: get group id and send group id to group panel
                 mainFormRef.CurrentPanel = MainForm.Panel.Groupe;
             }
         }
@@ -74,9 +79,9 @@ namespace client
         {
             string groupName = Prompt.ShowDialog("Nom du groupe:", "");
             if (groupName != "") {
-                // TODO: get active client id to set them as admin
-                int activeClientId = 1;
+                int activeClientId = mainFormRef.ActiveClient.id_client;
                 groupeAPI.createGroup(groupName, activeClientId);
+                // TODO : open group panel with group id??
             }
         }
 

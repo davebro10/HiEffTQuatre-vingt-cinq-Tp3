@@ -12,7 +12,7 @@ namespace client.API
     {
         public async Task<List<Client>> getAllClients() {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/client/getallclient").Result;
+            HttpResponseMessage response = client.GetAsync(baseAddress + "api/client/getallclient/").Result;
             if (response.IsSuccessStatusCode) {
                 List<Client> clients = await response.Content.ReadAsAsync<List<Client>>();
                 return clients;
@@ -20,11 +20,39 @@ namespace client.API
             return null;
         }
 
-        public void createClient() {
+        public async Task<Client> getClientById(int id)
+        {
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(baseAddress + "api/client/getclient/" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                Client c = await response.Content.ReadAsAsync<Client>();
+                return c;
+            }
+            return null;
+        }
+
+        public async Task<Client> auth(Client c)
+        {
+            HttpClient client = new HttpClient();
+            string jsonClient = JsonConvert.SerializeObject(c);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonClient);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = client.PostAsync(baseAddress + "api/client/auth/", byteContent).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                Client authClient = await response.Content.ReadAsAsync<Client>();
+                return authClient;
+            }
+            return null;
+        }
+
+        public void createClient(Client newClient) {
             Client c = new Client();
-            c.nom = "test1";
-            c.usager = "test2";
-            c.motdepasse = "test3";
+            c.nom = newClient.nom;
+            c.usager = newClient.usager;
+            c.motdepasse = newClient.motdepasse;
             c.action = DateTime.Now;
 
             HttpClient client = new HttpClient();
