@@ -143,9 +143,12 @@ namespace serveur
                         Console.WriteLine(e.Message);
                     }
                 }
+                return true;
             }
-
-            return api.DeleteFile(f);
+            else
+            {
+                return false;
+            }
         }
 
         [HttpGet]
