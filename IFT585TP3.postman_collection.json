@@ -1,0 +1,628 @@
+{
+	"info": {
+		"_postman_id": "bbf5762c-0ee5-4b55-ae4c-4bd71d62036b",
+		"name": "IFT585TP3",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:10281/api/client/getallclient",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "\"hello\""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/client/getallclient",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"client",
+						"getallclient"
+					],
+					"query": [
+						{
+							"key": "value",
+							"value": "test",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/client/getclient/6",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/client/getclient/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"client",
+						"getclient",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/client/getclient?usager=test2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/client/getclient?usager=test2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"client",
+						"getclient"
+					],
+					"query": [
+						{
+							"key": "usager",
+							"value": "test2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/client/modifyclient",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_client\": 5,\n    \"nom\": \"testmodifapi\",\n    \"usager\": \"testmodifapi2\",\n    \"motdepasse\": \"testmodifapi3\",\n    \"action\": null\n}"
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/client/modifyclient",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"client",
+						"modifyclient"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/client/deleteclient",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_client\": 5,\n    \"nom\": \"testmodifapi\",\n    \"usager\": \"testmodifapi2\",\n    \"motdepasse\": \"testmodifapi3\",\n    \"action\": null\n}"
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/client/deleteclient",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"client",
+						"deleteclient"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/groupe/getallgroup",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/groupe/getallgroup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"groupe",
+						"getallgroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/groupe/creategroup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_groupe\": 0,\n    \"admin\": 6,\n    \"nom\": \"G3\",\n}"
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/groupe/creategroup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"groupe",
+						"creategroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/groupe/modifygroup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_groupe\": 3,\n    \"admin\": 7,\n    \"nom\": \"G3MODIFNOM\",\n}"
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/groupe/modifygroup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"groupe",
+						"modifygroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/groupe/deletegroup",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id_groupe\": 3,\n    \"admin\": 7,\n    \"nom\": \"G3MODIFNOM\",\n}"
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/groupe/deletegroup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"groupe",
+						"deletegroup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/groupe/getgroup/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/groupe/getgroup/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"groupe",
+						"getgroup",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/invitation/getallinvitation",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/invitation/getallinvitation",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"invitation",
+						"getallinvitation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/invitation/InviteMemberToGroup?id_groupe=1&id_client=6",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/invitation/InviteMemberToGroup?id_groupe=2&id_client=7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"invitation",
+						"InviteMemberToGroup"
+					],
+					"query": [
+						{
+							"key": "id_groupe",
+							"value": "2"
+						},
+						{
+							"key": "id_client",
+							"value": "7"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/invitation/InviteAnswer?id_invitation=1&answer=true",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/invitation/InviteAnswer?id_invitation=3&answer=true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"invitation",
+						"InviteAnswer"
+					],
+					"query": [
+						{
+							"key": "id_invitation",
+							"value": "3"
+						},
+						{
+							"key": "answer",
+							"value": "true"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/invitation/GetInvitationByClient/7",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/invitation/GetInvitationByClient/7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"invitation",
+						"GetInvitationByClient",
+						"7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/invitation/GetGroupMember?id_groupe=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/invitation/GetGroupMember?id_groupe=2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"invitation",
+						"GetGroupMember"
+					],
+					"query": [
+						{
+							"key": "id_groupe",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/invitation/RemoveMemberFromGroup?id_groupe=1&id_client=7",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/invitation/RemoveMemberFromGroup?id_groupe=2&id_client=7",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"invitation",
+						"RemoveMemberFromGroup"
+					],
+					"query": [
+						{
+							"key": "id_groupe",
+							"value": "2"
+						},
+						{
+							"key": "id_client",
+							"value": "7"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/fichier/createfile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"id_fichier\": 0,\n        \"id_groupe_fk\": 1,\n        \"nom\": \"testFichier\"\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/fichier/createfile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"fichier",
+						"createfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/fichier/getfile/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/fichier/getfile/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"fichier",
+						"getfile",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/fichier/modifyfile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"id_fichier\": 1,\n        \"id_groupe_fk\": 1,\n        \"nom\": \"testFichierModif\"\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/fichier/modifyfile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"fichier",
+						"modifyfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:10281/api/fichier/deletefile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"id_fichier\": 1,\n        \"id_groupe_fk\": 1,\n        \"nom\": \"testFichierModif\"\n    }"
+				},
+				"url": {
+					"raw": "http://localhost:10281/api/fichier/deletefile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "10281",
+					"path": [
+						"api",
+						"fichier",
+						"deletefile"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
