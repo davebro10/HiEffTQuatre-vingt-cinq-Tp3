@@ -38,6 +38,9 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.groupeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Nom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ClientName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -61,11 +64,16 @@
             // 
             // GroupesListView
             // 
+            this.GroupesListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ID,
+            this.Nom});
             this.GroupesListView.Location = new System.Drawing.Point(25, 114);
+            this.GroupesListView.MultiSelect = false;
             this.GroupesListView.Name = "GroupesListView";
-            this.GroupesListView.Size = new System.Drawing.Size(202, 109);
+            this.GroupesListView.Size = new System.Drawing.Size(279, 213);
             this.GroupesListView.TabIndex = 2;
             this.GroupesListView.UseCompatibleStateImageBehavior = false;
+            this.GroupesListView.View = System.Windows.Forms.View.Details;
             // 
             // NomClientLabel
             // 
@@ -78,7 +86,7 @@
             // 
             // VoirGroupeButton
             // 
-            this.VoirGroupeButton.Location = new System.Drawing.Point(25, 233);
+            this.VoirGroupeButton.Location = new System.Drawing.Point(148, 340);
             this.VoirGroupeButton.Name = "VoirGroupeButton";
             this.VoirGroupeButton.Size = new System.Drawing.Size(75, 23);
             this.VoirGroupeButton.TabIndex = 4;
@@ -88,7 +96,7 @@
             // 
             // CreerButton
             // 
-            this.CreerButton.Location = new System.Drawing.Point(106, 233);
+            this.CreerButton.Location = new System.Drawing.Point(229, 340);
             this.CreerButton.Name = "CreerButton";
             this.CreerButton.Size = new System.Drawing.Size(75, 23);
             this.CreerButton.TabIndex = 5;
@@ -98,11 +106,15 @@
             // 
             // ClientsListView
             // 
-            this.ClientsListView.Location = new System.Drawing.Point(255, 56);
+            this.ClientsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.ClientName});
+            this.ClientsListView.Location = new System.Drawing.Point(342, 41);
+            this.ClientsListView.MultiSelect = false;
             this.ClientsListView.Name = "ClientsListView";
-            this.ClientsListView.Size = new System.Drawing.Size(121, 200);
+            this.ClientsListView.Size = new System.Drawing.Size(155, 322);
             this.ClientsListView.TabIndex = 6;
             this.ClientsListView.UseCompatibleStateImageBehavior = false;
+            this.ClientsListView.View = System.Windows.Forms.View.Details;
             // 
             // menuStrip1
             // 
@@ -111,7 +123,7 @@
             this.notificationsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(399, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(514, 24);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -128,6 +140,19 @@
             this.notificationsToolStripMenuItem.Text = "Notifications";
             this.notificationsToolStripMenuItem.Click += new System.EventHandler(this.notificationsToolStripMenuItem_Click);
             // 
+            // Nom
+            // 
+            this.Nom.Text = "Nom";
+            // 
+            // ID
+            // 
+            this.ID.Text = "ID";
+            // 
+            // ClientName
+            // 
+            this.ClientName.Text = "Nom";
+            this.ClientName.Width = 150;
+            // 
             // HomePanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -141,7 +166,7 @@
             this.Controls.Add(this.NameLabel);
             this.Controls.Add(this.menuStrip1);
             this.Name = "HomePanel";
-            this.Size = new System.Drawing.Size(399, 287);
+            this.Size = new System.Drawing.Size(514, 388);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -161,5 +186,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem groupeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem notificationsToolStripMenuItem;
+        private System.Windows.Forms.ColumnHeader ID;
+        private System.Windows.Forms.ColumnHeader Nom;
+        private System.Windows.Forms.ColumnHeader ClientName;
     }
 }
