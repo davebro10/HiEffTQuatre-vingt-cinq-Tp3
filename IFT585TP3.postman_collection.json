@@ -644,6 +644,42 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "http://localhost:10281/api/fichier/upload",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "fileRaw",
+									"type": "file",
+									"src": ""
+								},
+								{
+									"key": "file",
+									"value": "{\"id_fichier\": 2,\"id_groupe_fk\": 1,\"nom\": \"testFichier3.txt\"}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:10281/api/fichier/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10281",
+							"path": [
+								"api",
+								"fichier",
+								"upload"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
