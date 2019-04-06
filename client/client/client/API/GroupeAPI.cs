@@ -21,5 +21,19 @@ namespace client.API
             }
             return null;
         }
+        public void createGroup(string name, int admin_id)
+        {
+            Groupe g = new Groupe();
+            g.nom = name;
+            g.admin = admin_id;
+
+            HttpClient client = new HttpClient();
+            var jsonObj = JsonConvert.SerializeObject(g);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = client.PostAsync(baseAddress + "api/client/creategroup", byteContent).Result;
+        }
     }
 }
