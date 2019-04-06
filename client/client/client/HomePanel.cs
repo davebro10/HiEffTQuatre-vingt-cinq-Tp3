@@ -1,15 +1,19 @@
 ﻿using System.Windows.Forms;
+using System.Collections.Generic;
 using serveur.Models;
+using client.API;
 
 namespace client
 {
     public partial class HomePanel : UserControl, ISynchronizable
     {
         private MainForm mainFormRef;
+        private ClientAPI clientAPI;
 
         public HomePanel(MainForm reference)
         {
             mainFormRef = reference;
+            clientAPI = new ClientAPI();
 
             InitializeComponent();
             updateClientName();
@@ -32,8 +36,11 @@ namespace client
 
         }
 
-        private void fetchConnectedUsers() {
-
+        private async void fetchConnectedUsers() {
+            List<Client> clients = await clientAPI.getAllClients();
+            if (clients != null) {
+                // put in listview
+            }
         }
 
         private void VoirGroupeButton_Click(object sender, System.EventArgs e)
@@ -44,7 +51,7 @@ namespace client
 
         private void CreerButton_Click(object sender, System.EventArgs e)
         {
-            string groupName = Prompt.ShowDialog("Saisissez le nom du groupe:", "");
+            string groupName = Prompt.ShowDialog("Nom du groupe:", "");
 
             // TODO: get group name and send group name to GroupPanel
             mainFormRef.CurrentPanel = MainForm.Panel.Groupe;
