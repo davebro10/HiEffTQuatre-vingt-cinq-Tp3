@@ -43,27 +43,27 @@ namespace serveur
         }
 
         [HttpPost]
-        // POST api/invitation/InviteMemberToGroup?id_groupe={id}&id_client={id}
-        public bool InviteMemberToGroup([FromUri]int id_groupe,[FromUri]int id_client)
+        // POST api/invitation/InviteMemberToGroup
+        public bool InviteMemberToGroup([FromBody]Invitation inv)
         {
             API api = new API();
-            return api.InviteMemberToGroup(id_groupe,id_client);
+            return api.InviteMemberToGroup(inv.id_groupe_fk,inv.id_client_fk);
+        }
+
+        [HttpDelete]
+        // DELETE api/invitation/RemoveMemberFromGroup
+        public bool RemoveMemberFromGroup([FromBody]Invitation inv)
+        {
+            API api = new API();
+            return api.RemoveMemberFromGroup(inv.id_groupe_fk,inv.id_client_fk);
         }
 
         [HttpPost]
-        // POST api/invitation/RemoveMemberFromGroup?id_groupe={id}&id_client={id}
-        public bool RemoveMemberFromGroup([FromUri]int id_groupe,[FromUri]int id_client)
+        // POST api/invitation/InviteAnswer
+        public bool InviteAnswer([FromBody]Invitation inv)
         {
             API api = new API();
-            return api.RemoveMemberFromGroup(id_groupe,id_client);
-        }
-
-        [HttpPost]
-        // POST api/invitation/InviteAnswer?id_invitation={id}&answer={bool}
-        public bool InviteAnswer(int id_invitation, bool answer)
-        {
-            API api = new API();
-            return api.InviteAnswer(id_invitation,answer);
+            return api.InviteAnswer(inv.id_invitation,inv.answer);
         }
     }
 }

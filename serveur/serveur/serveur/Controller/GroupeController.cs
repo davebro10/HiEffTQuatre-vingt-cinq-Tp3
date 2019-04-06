@@ -23,7 +23,7 @@ namespace serveur
         }
 
         [HttpPost]
-        // POST api/groupe/creategroup/{g}
+        // POST api/groupe/creategroup
         public bool CreateGroup(Groupe g)
         {
             API api = new API();
@@ -31,15 +31,15 @@ namespace serveur
         }
 
         [HttpPost]
-        // POST api/groupe/modifygroup/{g}
+        // POST api/groupe/modifygroup
         public bool ModifyGroup(Groupe g)
         {
             API api = new API();
             return api.ModifyGroup(g);
         }
 
-        [HttpPost]
-        // POST api/groupe/deletegroup/{g}
+        [HttpDelete]
+        // POST api/groupe/deletegroup
         public bool DeleteGroup(Groupe g)
         {
             API api = new API();

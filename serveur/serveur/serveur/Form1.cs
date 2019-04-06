@@ -13,6 +13,7 @@ using Microsoft.Owin.Hosting;
 using System.Net.Http;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
+using System.IO;
 
 namespace serveur
 {
@@ -38,6 +39,8 @@ namespace serveur
             Console.WriteLine(response.Content.ReadAsStringAsync().Result);
 
             //webapp.Dispose();
+
+            Directory.CreateDirectory("groupfiles");
 
             refreshGrid();
         }
