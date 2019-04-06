@@ -4,11 +4,11 @@ namespace client
 {
     public partial class GroupPanel : UserControl, ISynchronizable
     {
-        public groupe SelectedGroup { get; set; }
+        //public groupe SelectedGroup { get; set; }
 
         public GroupPanel()
         {
-            SelectedGroup = Service.LstGroupes[1];
+            //SelectedGroup = Service.LstGroupes[1];
 
             InitializeComponent();
             Synchronize();
@@ -27,13 +27,13 @@ namespace client
 
         private void SyncGroup()
         {
-            GroupNameLabel.Text = SelectedGroup.nom;
-            AdminNameLabel.Text = SelectedGroup.admin.ToString();
+            //GroupNameLabel.Text = SelectedGroup.nom;
+            //AdminNameLabel.Text = SelectedGroup.admin.ToString();
         }
 
         private void SyncFiles()
         {
-            var files = Service.Lstfichiers;
+         /*   var files = Service.Lstfichiers;
 
             FileListView.Clear();
             foreach (var file in files)
@@ -41,17 +41,19 @@ namespace client
                 string[] rows = { file.id_fichier.ToString(), file.nom, file.id_groupe_fk.ToString() };
                 FileListView.Items.Add(new ListViewItem(rows));
             }
+            */
         }
 
         private void SyncMembers()
         {
-            var members = Service.LstClients;
+         /*   var members = Service.LstClients;
 
             MemberListBox.ClearSelected();
             foreach (var member in members)
             {
                 MemberListBox.Items.Add(member.usager);
             }
+            */
         }
 
         private void AddButton_Click(object sender, System.EventArgs e)

@@ -4,6 +4,7 @@ namespace client
 {
     internal class Service
     {
+        /*
         public static client CurrentClient { get; set; }
 
         public fichier CreateFile(client creator, groupe group, string name)
@@ -124,6 +125,7 @@ namespace client
 
         #endregion
 
-
+        */
     }
+    
 }
