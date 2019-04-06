@@ -345,3 +345,4 @@ healthchecksdb
 MigrationBackup/
 obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 obj/Debug/IFT585.TP1.csproj.CoreCompileInputs.cache
+client/client/client/client.csproj

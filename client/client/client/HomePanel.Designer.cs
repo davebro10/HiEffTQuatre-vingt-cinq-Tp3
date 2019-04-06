@@ -49,7 +49,6 @@
             this.NameLabel.Size = new System.Drawing.Size(29, 13);
             this.NameLabel.TabIndex = 0;
             this.NameLabel.Text = "Nom";
-            this.NameLabel.Click += new System.EventHandler(this.label1_Click);
             // 
             // GroupesLabel
             // 
@@ -59,7 +58,6 @@
             this.GroupesLabel.Size = new System.Drawing.Size(47, 13);
             this.GroupesLabel.TabIndex = 1;
             this.GroupesLabel.Text = "Groupes";
-            this.GroupesLabel.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // GroupesListView
             // 
@@ -86,6 +84,7 @@
             this.VoirGroupeButton.TabIndex = 4;
             this.VoirGroupeButton.Text = "Voir";
             this.VoirGroupeButton.UseVisualStyleBackColor = true;
+            this.VoirGroupeButton.Click += new System.EventHandler(this.VoirGroupeButton_Click);
             // 
             // CreerButton
             // 
@@ -95,6 +94,7 @@
             this.CreerButton.TabIndex = 5;
             this.CreerButton.Text = "Créer";
             this.CreerButton.UseVisualStyleBackColor = true;
+            this.CreerButton.Click += new System.EventHandler(this.CreerButton_Click);
             // 
             // ClientsListView
             // 
@@ -126,6 +126,7 @@
             this.notificationsToolStripMenuItem.Name = "notificationsToolStripMenuItem";
             this.notificationsToolStripMenuItem.Size = new System.Drawing.Size(87, 20);
             this.notificationsToolStripMenuItem.Text = "Notifications";
+            this.notificationsToolStripMenuItem.Click += new System.EventHandler(this.notificationsToolStripMenuItem_Click);
             // 
             // HomePanel
             // 

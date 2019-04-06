@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using serveur.Models;
 
 namespace client
 {
@@ -12,12 +13,16 @@ namespace client
         private readonly HomePanel _homePanel;
         private readonly GroupPanel _groupPanel;
         private readonly ConnectionPanel _connectionPanel;
+        private readonly NotificationsPanel _notificationsPanel;
 
+        public Client ActiveClient { get; set; }
+        
         public enum Panel
         {
             Home,
             Groupe,
-            Connection
+            Connection,
+            Notification
         }
 
         private Panel _panel;
@@ -26,9 +31,11 @@ namespace client
         {
             InitializeComponent();
 
-            _homePanel = new HomePanel();
+            _homePanel = new HomePanel(this);
             _groupPanel = new GroupPanel();
-            CurrentPanel = Panel.Groupe;
+            _connectionPanel = new ConnectionPanel(this);
+            _notificationsPanel = new NotificationsPanel();
+            CurrentPanel = Panel.Connection;
 
             Task.Run(PeriodicSynchronization);
         }
@@ -43,13 +50,16 @@ namespace client
                 switch (_panel)
                 {
                     case Panel.Home:
-                        ActivePanel.Controls.Add(new HomePanel());
+                        ActivePanel.Controls.Add(new HomePanel(this));
                         break;
                     case Panel.Groupe:
                         ActivePanel.Controls.Add(new GroupPanel());
                         break;
                     case Panel.Connection:
-                        ActivePanel.Controls.Add(new ConnectionPanel());
+                        ActivePanel.Controls.Add(new ConnectionPanel(this));
+                        break;
+                    case Panel.Notification:
+                        ActivePanel.Controls.Add(new NotificationsPanel());
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
@@ -71,6 +81,9 @@ namespace client
                     break;
                 case Panel.Groupe:
                     _groupPanel.Synchronize();
+                    break;
+                case Panel.Notification:
+                    _notificationsPanel.Synchronize();
                     break;
                 case Panel.Connection:
                     break;

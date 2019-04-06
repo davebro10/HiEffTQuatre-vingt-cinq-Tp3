@@ -1,6 +1,6 @@
 ﻿namespace client
 {
-    partial class Notifications
+    partial class NotificationsPanel
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.

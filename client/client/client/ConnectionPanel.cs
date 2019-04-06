@@ -1,28 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using serveur.Models;
 
 namespace client
 {
     public partial class ConnectionPanel : UserControl
     {
-        public ConnectionPanel()
+        private MainForm mainFormReference;
+
+        public ConnectionPanel(MainForm reference)
         {
+            mainFormReference = reference;
             InitializeComponent();
         }
 
         private void ConnectionButton_Click(object sender, EventArgs e)
         {
+            Client tentativeClient = new Client();
+
+            string user = UserTextBox.Text;
+            string password = PasswordTextBox.Text;
+
             // TODO: connect to database to check data
-            if (UserTextBox.Text != "" && PasswordTextBox.Text != ""
-                && UserTextBox.Text == PasswordTextBox.Text) {
-                // MainForm.CurrentPanel = MainForm.Panel.Home;
+
+            if (user != "" && password != "" && user == password)
+            {
+                // fill up client info
+                tentativeClient.nom = UserTextBox.Text;
+                tentativeClient.motdepasse = PasswordTextBox.Text;
+
+                // set as active client and change panel
+                mainFormReference.ActiveClient = tentativeClient;
+                mainFormReference.CurrentPanel = MainForm.Panel.Home;
+            }
+            else {
+                // TODO: show error message
             }
         }
     }
