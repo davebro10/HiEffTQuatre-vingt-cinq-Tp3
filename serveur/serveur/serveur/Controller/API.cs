@@ -28,7 +28,7 @@ namespace serveur.Models
                 bdd.CloseConnection();
                 return true;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 cmd.Transaction.Rollback();
                 bdd.CloseConnection();
@@ -45,7 +45,7 @@ namespace serveur.Models
                 var reader = cmd.ExecuteReader();
                 return reader;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 bdd.CloseConnection();
                 return null;
@@ -74,16 +74,17 @@ namespace serveur.Models
             {
                 List<Client> lst = new List<Client>();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM client");
-                MySqlDataReader reader = ExecuteReader(cmd);
-
-                while (reader.Read())
+                using (MySqlDataReader reader = ExecuteReader(cmd))
                 {
-                    Client c = ReaderToClient(reader);
-                    lst.Add(c);
-                }
+                    while (reader.Read())
+                    {
+                        Client c = ReaderToClient(reader);
+                        lst.Add(c);
+                    }
 
-                bdd.CloseConnection();
-                return lst;
+                    bdd.CloseConnection();
+                    return lst;
+                }
             }
             catch (Exception ex)
             {
@@ -145,17 +146,17 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_client", id_client);
 
-            MySqlDataReader reader = ExecuteReader(cmd);
-
-            if(!reader.HasRows)
+            using (var reader = ExecuteReader(cmd))
             {
-                return null;
+                if (!reader.HasRows)
+                {
+                    return null;
+                }
+                reader.Read();
+                Client client = ReaderToClient(reader);
+                bdd.CloseConnection();
+                return client;
             }
-            reader.Read();
-            Client client = ReaderToClient(reader);
-            bdd.CloseConnection();
-            reader.Dispose();
-            return client;
         }
 
         public Client GetClient(string usager)
@@ -168,18 +169,18 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@usager", usager);
 
-            var reader = ExecuteReader(cmd);
-
-            if (!reader.HasRows)
+            using (var reader = ExecuteReader(cmd))
             {
-                return null;
-            }
+                if (!reader.HasRows)
+                {
+                    return null;
+                }
 
-            reader.Read();
-            Client client = ReaderToClient(reader);
-            bdd.CloseConnection();
-            reader.Dispose();
-            return client;
+                reader.Read();
+                Client client = ReaderToClient(reader);
+                bdd.CloseConnection();
+                return client;
+            }
         }
 
         // GROUP //
@@ -214,16 +215,17 @@ namespace serveur.Models
             {
                 List<Groupe> lst = new List<Groupe>();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM groupe");
-                MySqlDataReader reader = ExecuteReader(cmd);
-
-                while (reader.Read())
+                using (var reader = ExecuteReader(cmd))
                 {
-                    Groupe g = ReaderToGroup(reader);
-                    lst.Add(g);
-                }
+                    while (reader.Read())
+                    {
+                        Groupe g = ReaderToGroup(reader);
+                        lst.Add(g);
+                    }
 
-                bdd.CloseConnection();
-                return lst;
+                    bdd.CloseConnection();
+                    return lst;
+                }
             }
             catch (Exception ex)
             {
@@ -298,18 +300,18 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_groupe", id_groupe);
 
-            var reader = ExecuteReader(cmd);
-
-            if (!reader.HasRows)
+            using (var reader = ExecuteReader(cmd))
             {
-                return null;
-            }
+                if (!reader.HasRows)
+                {
+                    return null;
+                }
 
-            reader.Read();
-            Groupe groupe = ReaderToGroup(reader);
-            bdd.CloseConnection();
-            reader.Dispose();
-            return groupe;
+                reader.Read();
+                Groupe groupe = ReaderToGroup(reader);
+                bdd.CloseConnection();
+                return groupe;
+            }
         }
 
         public List<Invitation> GetAllInvitation()
@@ -318,16 +320,17 @@ namespace serveur.Models
             {
                 List<Invitation> lst = new List<Invitation>();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM invitation");
-                MySqlDataReader reader = ExecuteReader(cmd);
-
-                while (reader.Read())
+                using (MySqlDataReader reader = ExecuteReader(cmd))
                 {
-                    Invitation inv = ReaderToInvitation(reader);
-                    lst.Add(inv);
-                }
+                    while (reader.Read())
+                    {
+                        Invitation inv = ReaderToInvitation(reader);
+                        lst.Add(inv);
+                    }
 
-                bdd.CloseConnection();
-                return lst;
+                    bdd.CloseConnection();
+                    return lst;
+                }
             }
             catch (Exception ex)
             {
@@ -342,18 +345,18 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_invitation", id_invitation);
 
-            var reader = ExecuteReader(cmd);
-
-            if (!reader.HasRows)
+            using (var reader = ExecuteReader(cmd))
             {
-                return null;
-            }
+                if (!reader.HasRows)
+                {
+                    return null;
+                }
 
-            reader.Read();
-            Invitation inv = ReaderToInvitation(reader);
-            bdd.CloseConnection();
-            reader.Dispose();
-            return inv;
+                reader.Read();
+                Invitation inv = ReaderToInvitation(reader);
+                bdd.CloseConnection();
+                return inv;
+            }
         }
 
         public List<Invitation> GetInvitationByClient(int id_client)
@@ -363,16 +366,17 @@ namespace serveur.Models
                 List<Invitation> lst = new List<Invitation>();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM invitation WHERE id_client_fk=@id_client");
                 cmd.Parameters.AddWithValue("@id_client", id_client);
-                MySqlDataReader reader = ExecuteReader(cmd);
-
-                while (reader.Read())
+                using (var reader = ExecuteReader(cmd))
                 {
-                    Invitation inv = ReaderToInvitation(reader);
-                    lst.Add(inv);
-                }
+                    while (reader.Read())
+                    {
+                        Invitation inv = ReaderToInvitation(reader);
+                        lst.Add(inv);
+                    }
 
-                bdd.CloseConnection();
-                return lst;
+                    bdd.CloseConnection();
+                    return lst;
+                }
             }
             catch (Exception ex)
             {
@@ -438,18 +442,18 @@ namespace serveur.Models
                 string query = "SELECT * FROM liste_groupe_client WHERE id_groupe_fk=@id_groupe";
                 MySqlCommand cmd = new MySqlCommand(query);
                 cmd.Parameters.AddWithValue("@id_groupe", id_groupe);
-                MySqlDataReader reader = ExecuteReader(cmd);
-
                 List<int> lstClientId = new List<int>();
-                while (reader.Read())
+                using (var reader = ExecuteReader(cmd))
                 {
-                    int id_client = reader["id_client_fk"] != DBNull.Value ? (int)reader["id_client_fk"] : 0;
-                    if (id_client != 0)
+                    while (reader.Read())
                     {
-                        lstClientId.Add(id_client);
+                        int id_client = reader["id_client_fk"] != DBNull.Value ? (int)reader["id_client_fk"] : 0;
+                        if (id_client != 0)
+                        {
+                            lstClientId.Add(id_client);
+                        }
                     }
                 }
-                reader.Dispose();
                     
                 foreach(int id_client in lstClientId)
                 {
@@ -497,18 +501,18 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_fichier", id_fichier);
 
-            var reader = ExecuteReader(cmd);
-
-            if (!reader.HasRows)
+            using (var reader = ExecuteReader(cmd))
             {
-                return null;
-            }
+                if (!reader.HasRows)
+                {
+                    return null;
+                }
 
-            reader.Read();
-            Fichier fichier = ReaderToFile(reader);
-            bdd.CloseConnection();
-            reader.Dispose();
-            return fichier;
+                reader.Read();
+                Fichier fichier = ReaderToFile(reader);
+                bdd.CloseConnection();
+                return fichier;
+            }
         }
 
         public bool CreateFile(Fichier file)
