@@ -44,7 +44,30 @@ namespace client.API
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            HttpResponseMessage response = client.PostAsync(baseAddress + "api/client/creategroup", byteContent).Result;
+            HttpResponseMessage response = client.PostAsync(baseAddress + "api/groupe/creategroup", byteContent).Result;
+        }
+
+        public void modifyGroup(Groupe g)
+        {
+            HttpClient client = new HttpClient();
+            var jsonObj = JsonConvert.SerializeObject(g);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = client.PostAsync(baseAddress + "api/groupe/modifygroup", byteContent).Result;
+        }
+
+        public void deleteGroup(Groupe g)
+        {
+            HttpClient client = new HttpClient();
+            var request = new HttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(baseAddress + "api/groupe/deletegroup"),
+                Content = new StringContent(JsonConvert.SerializeObject(g), System.Text.Encoding.UTF8, "application/json")
+            };
+            var response = client.SendAsync(request).Result;
         }
     }
 }
