@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace client
 {
@@ -30,30 +31,33 @@ namespace client
 
         private void SyncFiles()
         {
-            //var files = Task.Run(() => )
+            var files = Task.Run(() => FichierAPI.GetFilesFromGroup(ActiveGroup)).Result;
+            if (files == null)
+                return;
 
-
-         /*   var files = Service.Lstfichiers;
-
-            FileListView.Clear();
-            foreach (var file in files)
+            FileListView.Invoke((MethodInvoker) delegate
             {
-                string[] rows = { file.id_fichier.ToString(), file.nom, file.id_groupe_fk.ToString() };
-                FileListView.Items.Add(new ListViewItem(rows));
-            }
-            */
+                FileListView.Clear();
+                foreach (var file in files)
+                {
+                    string[] rows = { file.id_fichier.ToString(), file.nom, file.id_groupe_fk.ToString() };
+                    FileListView.Items.Add(new ListViewItem(rows));
+                }
+            });
         }
 
         private void SyncMembers()
         {
-         /*   var members = Service.LstClients;
+            var members = Task.Run(() => InvitationAPI.GetGroupMembers(ActiveGroup.id_groupe)).Result;
+            if (members == null)
+                return;
 
-            MemberListBox.ClearSelected();
-            foreach (var member in members)
+            MemberListBox.Invoke((MethodInvoker) delegate
             {
-                MemberListBox.Items.Add(member.usager);
-            }
-            */
+                MemberListBox.ClearSelected();
+                foreach (var member in members)
+                    MemberListBox.Items.Add(member.usager);
+            });
         }
 
         private void AddButton_Click(object sender, System.EventArgs e)

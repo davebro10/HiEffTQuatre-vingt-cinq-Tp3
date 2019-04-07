@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using serveur.Models;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -90,6 +91,13 @@ namespace client.API
                 Console.Error.WriteLine(ex.Message);
             }
             response?.Dispose();
+        }
+
+        public async Task<List<Fichier>> GetFilesFromGroup(Groupe group)
+        {
+            //TODO
+
+            return new List<Fichier>();
         }
     }
 }
