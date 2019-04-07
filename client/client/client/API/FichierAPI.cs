@@ -12,49 +12,87 @@ namespace client.API
     {
         public async Task<Fichier> getFileById(int id)
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/fichier/getfile/" + id);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Fichier fichier = await response.Content.ReadAsAsync<Fichier>();
-                return fichier;
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/fichier/getfile/" + id))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return await response.Content.ReadAsAsync<Fichier>();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
             }
             return null;
         }
 
-        public void createFile(Fichier f)
+        public async Task createFileAsync(Fichier f)
         {
-            HttpClient client = new HttpClient();
             var jsonObj = JsonConvert.SerializeObject(f);
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
-            var byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = null;
 
-            HttpResponseMessage response = client.PostAsync(baseAddress + "api/fichier/createfile", byteContent).Result;
-        }
-
-        public void modifyFile(Fichier f)
-        {
-            HttpClient client = new HttpClient();
-            var jsonObj = JsonConvert.SerializeObject(f);
-            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
-            var byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-
-            HttpResponseMessage response = client.PostAsync(baseAddress + "api/fichier/modifyfile", byteContent).Result;
-        }
-
-        public void deleteFile(Fichier f)
-        {
-            HttpClient client = new HttpClient();
-
-            var request = new HttpRequestMessage
+            try
             {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri(baseAddress + "api/client/deletefile"),
-                Content = new StringContent(JsonConvert.SerializeObject(f), System.Text.Encoding.UTF8, "application/json")
-            };
-            var response = client.SendAsync(request).Result;
+                using (HttpClient client = new HttpClient())
+                using (var byteContent = new ByteArrayContent(buffer))
+                {
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    response = await client.PostAsync(baseAddress + "api/fichier/createfile", byteContent);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            response?.Dispose();
+        }
+
+        public async Task modifyFileAsync(Fichier f)
+        {
+            var jsonObj = JsonConvert.SerializeObject(f);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
+            HttpResponseMessage response = null;
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                using (var byteContent = new ByteArrayContent(buffer))
+                {
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    response = await client.PostAsync(baseAddress + "api/fichier/modifyfile", byteContent);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            response?.Dispose();
+        }
+
+        public async Task deleteFileAsync(Fichier f)
+        {
+            HttpResponseMessage response = null;
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                using (var request = new HttpRequestMessage())
+                {
+                    request.Method = HttpMethod.Delete;
+                    request.RequestUri = new Uri(baseAddress + "api/client/deletefile");
+                    request.Content = new StringContent(JsonConvert.SerializeObject(f), System.Text.Encoding.UTF8, "application/json");
+
+                    response = await client.SendAsync(request);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            response?.Dispose();
         }
     }
 }

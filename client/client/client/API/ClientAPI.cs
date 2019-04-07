@@ -11,51 +11,85 @@ namespace client.API
     class ClientAPI : API
     {
         public async Task<List<Client>> getAllClients() {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getallclient/");
-            if (response.IsSuccessStatusCode) {
-                List<Client> clients = await response.Content.ReadAsAsync<List<Client>>();
-                return clients;
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getallclient/"))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return await response.Content.ReadAsAsync<List<Client>>();
+                    }
+                }
             }
-            return null;
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            return new List<Client>();
         }
 
         public async Task<Client> getClientById(int id)
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getclient/" + id);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Client c = await response.Content.ReadAsAsync<Client>();
-                return c;
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getclient/" + id))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return await response.Content.ReadAsAsync<Client>();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
             }
             return null;
         }
 
         public async Task<Client> getClientByUser(string user)
         {
-            HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/client/getclient?usager=" + user).Result;
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Client c = await response.Content.ReadAsAsync<Client>();
-                return c;
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getclient?usager=" + user))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return await response.Content.ReadAsAsync<Client>();
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
             }
             return null;
         }
 
         public async Task<Client> auth(Client c)
         {
-            HttpClient client = new HttpClient();
-            string jsonClient = JsonConvert.SerializeObject(c);
-            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonClient);
-            var byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            HttpResponseMessage response = await client.PostAsync(baseAddress + "api/client/auth/", byteContent);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                Client authClient = await response.Content.ReadAsAsync<Client>();
-                return authClient;
+                string jsonClient = JsonConvert.SerializeObject(c);
+                var buffer = System.Text.Encoding.UTF8.GetBytes(jsonClient);
+                var byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.PostAsync(baseAddress + "api/client/auth/", byteContent))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Client authClient = await response.Content.ReadAsAsync<Client>();
+                        return authClient;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
             }
             return null;
         }
@@ -66,17 +100,27 @@ namespace client.API
             c.usager = newClient.usager;
             c.motdepasse = newClient.motdepasse;
             c.action = DateTime.Now;
-
-            HttpClient client = new HttpClient();
             var jsonObj = JsonConvert.SerializeObject(c);
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
-            var byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = null;
 
-            HttpResponseMessage response = await client.PostAsync(baseAddress + "api/client/createclient", byteContent);
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                using(var byteContent = new ByteArrayContent(buffer))
+                {
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    response = await client.PostAsync(baseAddress + "api/client/createclient", byteContent);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            response?.Dispose();
         }
 
-        public void modifyClient(Client clientToModify)
+        public async Task modifyClientAsync(Client clientToModify)
         {
             Client c = new Client();
             c.id_client = clientToModify.id_client;
@@ -84,14 +128,24 @@ namespace client.API
             c.usager = clientToModify.usager;
             c.motdepasse = clientToModify.motdepasse;
             c.action = DateTime.Now;
-
-            HttpClient client = new HttpClient();
             var jsonObj = JsonConvert.SerializeObject(c);
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
-            var byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = null;
 
-            HttpResponseMessage response = client.PostAsync(baseAddress + "api/client/modifyclient", byteContent).Result;
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                using (var byteContent = new ByteArrayContent(buffer))
+                {
+                    byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                    response = await client.PostAsync(baseAddress + "api/client/modifyclient", byteContent);
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            response?.Dispose();
         }
 
         public void deleteClient(Client clientToDelete)
@@ -102,16 +156,24 @@ namespace client.API
             c.usager = clientToDelete.usager;
             c.motdepasse = clientToDelete.motdepasse;
             c.action = DateTime.Now;
-
-            HttpClient client = new HttpClient();
-
-            var request = new HttpRequestMessage
+            HttpResponseMessage response = null;
+            try
             {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri(baseAddress + "api/client/deleteclient"),
-                Content = new StringContent(JsonConvert.SerializeObject(c), System.Text.Encoding.UTF8, "application/json")
-            };
-            var response = client.SendAsync(request).Result;
+                using (HttpClient client = new HttpClient())
+                using (var request = new HttpRequestMessage())
+                {
+                    request.Method = HttpMethod.Delete;
+                    request.RequestUri = new Uri(baseAddress + "api/client/deleteclient");
+                    request.Content = new StringContent(JsonConvert.SerializeObject(c), System.Text.Encoding.UTF8, "application/json");
+
+                    response = client.SendAsync(request).Result;
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            response?.Dispose();
         }
     }
 }
