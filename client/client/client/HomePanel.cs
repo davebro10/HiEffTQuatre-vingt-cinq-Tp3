@@ -66,14 +66,17 @@ namespace client
             if (clients != null) {
                 foreach (Client client in clients)
                 {
-                    string status = client.action != null ? "En ligne" : "Hors ligne";
+                    DateTime now = DateTime.Now;
+                    DateTime tenMinutesFromNow = now.AddMinutes(10);
+                    bool isConnected = client.action != null && client.action < tenMinutesFromNow;
+                    string status = isConnected ? "En ligne" : "Hors ligne";
                     string[] rows = { client.nom, status };
                     ClientsListView.Items.Add(new ListViewItem(rows));
                 }
             }
             else
             {
-                DialogResult res = MessageBox.Show("La recherche des utilisateurs connectés a échoué", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                DialogResult res = MessageBox.Show("La recherche des utilisateurs a échoué", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
