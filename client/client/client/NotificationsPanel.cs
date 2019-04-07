@@ -41,24 +41,24 @@ namespace client
             }
         }
 
-        private void AcceptButton_Click(object sender, System.EventArgs e)
+        private async void AcceptButton_ClickAsync(object sender, System.EventArgs e)
         {
             if (NotificationsListView.SelectedItems.Count == 1)
             {
                 int invitationId = Int32.Parse(NotificationsListView.SelectedItems[0].Text);
                 Invitation invite = new Invitation();
                 invite.id_invitation = invitationId;
-                invitationAPI.answerInvite(invite, true);
+                await invitationAPI.answerInviteAsync(invite, true);
             }
         }
 
-        private void DeclineButton_Click(object sender, System.EventArgs e)
+        private async void DeclineButton_ClickAsync(object sender, System.EventArgs e)
         {
             if (NotificationsListView.SelectedItems.Count == 1) {
                 int invitationId = Int32.Parse(NotificationsListView.SelectedItems[0].Text);
                 Invitation invite = new Invitation();
                 invite.id_invitation = invitationId;
-                invitationAPI.answerInvite(invite, false);
+                await invitationAPI.answerInviteAsync(invite, false);
             }
         }
 

@@ -56,7 +56,7 @@
             this.AcceptButton.TabIndex = 1;
             this.AcceptButton.Text = "Accepter";
             this.AcceptButton.UseVisualStyleBackColor = true;
-            this.AcceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
+            this.AcceptButton.Click += new System.EventHandler(this.AcceptButton_ClickAsync);
             // 
             // DeclineButton
             // 
@@ -66,7 +66,7 @@
             this.DeclineButton.TabIndex = 2;
             this.DeclineButton.Text = "Refuser";
             this.DeclineButton.UseVisualStyleBackColor = true;
-            this.DeclineButton.Click += new System.EventHandler(this.DeclineButton_Click);
+            this.DeclineButton.Click += new System.EventHandler(this.DeclineButton_ClickAsync);
             // 
             // BackButton
             // 
