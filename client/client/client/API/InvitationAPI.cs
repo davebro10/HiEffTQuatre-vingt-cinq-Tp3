@@ -13,7 +13,7 @@ namespace client.API
         public async Task<List<Invitation>> getAllGroups()
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/groupe/getallinvitation").Result;
+            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/groupe/getallinvitation");
             if (response.IsSuccessStatusCode)
             {
                 List<Invitation> invites = await response.Content.ReadAsAsync<List<Invitation>>();
@@ -25,7 +25,7 @@ namespace client.API
         public async Task<List<Invitation>> getInvitationsByClient(int id)
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/groupe/getinvitationbyclient/" + id).Result;
+            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/groupe/getinvitationbyclient/" + id);
             if (response.IsSuccessStatusCode)
             {
                 List<Invitation> invites = await response.Content.ReadAsAsync<List<Invitation>>();
@@ -37,7 +37,7 @@ namespace client.API
         public async Task<List<Client>> getGroupMembers(int id)
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/invitation/GetGroupMember?id_groupe=" + id).Result;
+            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/invitation/GetGroupMember?id_groupe=" + id);
             if (response.IsSuccessStatusCode)
             {
                 List<Client> clients = await response.Content.ReadAsAsync<List<Client>>();
@@ -54,7 +54,7 @@ namespace client.API
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonClient);
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            HttpResponseMessage response = client.PostAsync(baseAddress + "api/invitation/InviteAnswer", byteContent).Result;
+            HttpResponseMessage response = await client.PostAsync(baseAddress + "api/invitation/InviteAnswer", byteContent);
         }
     }
 }

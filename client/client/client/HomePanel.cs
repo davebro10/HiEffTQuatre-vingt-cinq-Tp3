@@ -75,12 +75,12 @@ namespace client
             }
         }
 
-        private void CreerButton_Click(object sender, System.EventArgs e)
+        private async void CreerButton_ClickAsync(object sender, System.EventArgs e)
         {
             string groupName = Prompt.ShowDialog("Nom du groupe:", "");
             if (groupName != "") {
                 int activeClientId = mainFormRef.ActiveClient.id_client;
-                groupeAPI.createGroup(groupName, activeClientId);
+                await groupeAPI.createGroup(groupName, activeClientId);
                 // TODO : open group panel with group id??
             }
         }

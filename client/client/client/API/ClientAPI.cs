@@ -12,7 +12,7 @@ namespace client.API
     {
         public async Task<List<Client>> getAllClients() {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/client/getallclient/").Result;
+            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getallclient/");
             if (response.IsSuccessStatusCode) {
                 List<Client> clients = await response.Content.ReadAsAsync<List<Client>>();
                 return clients;
@@ -23,7 +23,7 @@ namespace client.API
         public async Task<Client> getClientById(int id)
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/client/getclient/" + id).Result;
+            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getclient/" + id);
             if (response.IsSuccessStatusCode)
             {
                 Client c = await response.Content.ReadAsAsync<Client>();
@@ -39,7 +39,7 @@ namespace client.API
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonClient);
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            HttpResponseMessage response = client.PostAsync(baseAddress + "api/client/auth/", byteContent).Result;
+            HttpResponseMessage response = await client.PostAsync(baseAddress + "api/client/auth/", byteContent);
             if (response.IsSuccessStatusCode)
             {
                 Client authClient = await response.Content.ReadAsAsync<Client>();
@@ -48,7 +48,7 @@ namespace client.API
             return null;
         }
 
-        public void createClient(Client newClient) {
+        public async Task createClientAsync(Client newClient) {
             Client c = new Client();
             c.nom = newClient.nom;
             c.usager = newClient.usager;
@@ -61,7 +61,7 @@ namespace client.API
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            HttpResponseMessage response = client.PostAsync(baseAddress + "api/client/createclient", byteContent).Result;
+            HttpResponseMessage response = await client.PostAsync(baseAddress + "api/client/createclient", byteContent);
         }
     }
 }

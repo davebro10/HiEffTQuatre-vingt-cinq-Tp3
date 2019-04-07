@@ -13,7 +13,7 @@ namespace client.API
         public async Task<List<Groupe>> getAllGroups()
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/groupe/getallgroup").Result;
+            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/groupe/getallgroup");
             if (response.IsSuccessStatusCode)
             {
                 List<Groupe> groups = await response.Content.ReadAsAsync<List<Groupe>>();
@@ -23,7 +23,7 @@ namespace client.API
         }
         public async Task<Groupe> getGroupById(int id) {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/groupe/getgroup/" + id).Result;
+            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/groupe/getgroup/" + id);
             if (response.IsSuccessStatusCode)
             {
                 Groupe group = await response.Content.ReadAsAsync<Groupe>();
@@ -32,7 +32,7 @@ namespace client.API
             return null;
         }
 
-        public void createGroup(string name, int admin_id)
+        public async Task createGroup(string name, int admin_id)
         {
             Groupe g = new Groupe();
             g.nom = name;
@@ -44,7 +44,7 @@ namespace client.API
             var byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
-            HttpResponseMessage response = client.PostAsync(baseAddress + "api/client/creategroup", byteContent).Result;
+            HttpResponseMessage response = await client.PostAsync(baseAddress + "api/client/creategroup", byteContent);
         }
     }
 }

@@ -13,7 +13,7 @@ namespace client.API
         public async Task<List<Fichier>> getAllGroups()
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = client.GetAsync(baseAddress + "api/groupe/getallfichier").Result;
+            HttpResponseMessage response = await client.GetAsync(baseAddress + "api/groupe/getallfichier");
             if (response.IsSuccessStatusCode)
             {
                 List<Fichier> fichiers = await response.Content.ReadAsAsync<List<Fichier>>();
