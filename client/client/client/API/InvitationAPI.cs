@@ -22,6 +22,18 @@ namespace client.API
             return null;
         }
 
+        public async Task<List<Invitation>> getInvitationsByClient(int id)
+        {
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(baseAddress + "api/groupe/getinvitationbyclient/" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                List<Invitation> invites = await response.Content.ReadAsAsync<List<Invitation>>();
+                return invites;
+            }
+            return null;
+        }
+
         public async Task<List<Client>> getGroupMembers(int id)
         {
             HttpClient client = new HttpClient();
@@ -32,6 +44,17 @@ namespace client.API
                 return clients;
             }
             return null;
+        }
+
+        public async void answerInvite(Invitation invite, bool answer)
+        {
+            HttpClient client = new HttpClient();
+            invite.answer = answer;
+            string jsonClient = JsonConvert.SerializeObject(invite);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonClient);
+            var byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = client.PostAsync(baseAddress + "api/invitation/InviteAnswer", byteContent).Result;
         }
     }
 }

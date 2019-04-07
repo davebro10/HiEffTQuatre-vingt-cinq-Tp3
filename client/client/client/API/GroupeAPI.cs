@@ -21,6 +21,17 @@ namespace client.API
             }
             return null;
         }
+        public async Task<Groupe> getGroupById(int id) {
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = client.GetAsync(baseAddress + "api/groupe/getgroup/" + id).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                Groupe group = await response.Content.ReadAsAsync<Groupe>();
+                return group;
+            }
+            return null;
+        }
+
         public void createGroup(string name, int admin_id)
         {
             Groupe g = new Groupe();

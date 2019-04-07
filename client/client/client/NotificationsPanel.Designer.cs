@@ -32,15 +32,21 @@
             this.AcceptButton = new System.Windows.Forms.Button();
             this.DeclineButton = new System.Windows.Forms.Button();
             this.BackButton = new System.Windows.Forms.Button();
+            this.Groupe = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Admin = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // NotificationsListView
             // 
+            this.NotificationsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.Groupe,
+            this.Admin});
             this.NotificationsListView.Location = new System.Drawing.Point(14, 14);
             this.NotificationsListView.Name = "NotificationsListView";
             this.NotificationsListView.Size = new System.Drawing.Size(354, 209);
             this.NotificationsListView.TabIndex = 0;
             this.NotificationsListView.UseCompatibleStateImageBehavior = false;
+            this.NotificationsListView.View = System.Windows.Forms.View.Details;
             // 
             // AcceptButton
             // 
@@ -50,6 +56,7 @@
             this.AcceptButton.TabIndex = 1;
             this.AcceptButton.Text = "Accepter";
             this.AcceptButton.UseVisualStyleBackColor = true;
+            this.AcceptButton.Click += new System.EventHandler(this.AcceptButton_Click);
             // 
             // DeclineButton
             // 
@@ -59,6 +66,7 @@
             this.DeclineButton.TabIndex = 2;
             this.DeclineButton.Text = "Refuser";
             this.DeclineButton.UseVisualStyleBackColor = true;
+            this.DeclineButton.Click += new System.EventHandler(this.DeclineButton_Click);
             // 
             // BackButton
             // 
@@ -68,8 +76,17 @@
             this.BackButton.TabIndex = 3;
             this.BackButton.Text = "Retour";
             this.BackButton.UseVisualStyleBackColor = true;
+            this.BackButton.Click += new System.EventHandler(this.BackButton_Click);
             // 
-            // Notifications
+            // Groupe
+            // 
+            this.Groupe.Text = "Groupe";
+            // 
+            // Admin
+            // 
+            this.Admin.Text = "Admin";
+            // 
+            // NotificationsPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -77,7 +94,7 @@
             this.Controls.Add(this.DeclineButton);
             this.Controls.Add(this.AcceptButton);
             this.Controls.Add(this.NotificationsListView);
-            this.Name = "Notifications";
+            this.Name = "NotificationsPanel";
             this.Size = new System.Drawing.Size(384, 280);
             this.ResumeLayout(false);
 
@@ -89,5 +106,7 @@
         private System.Windows.Forms.Button AcceptButton;
         private System.Windows.Forms.Button DeclineButton;
         private System.Windows.Forms.Button BackButton;
+        private System.Windows.Forms.ColumnHeader Groupe;
+        private System.Windows.Forms.ColumnHeader Admin;
     }
 }

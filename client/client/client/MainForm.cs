@@ -35,7 +35,7 @@ namespace client
             _homePanel = new HomePanel(this);
             _groupPanel = new GroupPanel();
             _connectionPanel = new ConnectionPanel(this);
-            _notificationsPanel = new NotificationsPanel();
+            _notificationsPanel = new NotificationsPanel(this);
             CurrentPanel = Panel.Connection;
 
             Task.Run(PeriodicSynchronization);
@@ -60,7 +60,7 @@ namespace client
                         ActivePanel.Controls.Add(new ConnectionPanel(this));
                         break;
                     case Panel.Notification:
-                        ActivePanel.Controls.Add(new NotificationsPanel());
+                        ActivePanel.Controls.Add(new NotificationsPanel(this));
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();

@@ -62,9 +62,6 @@ namespace client.API
             byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             HttpResponseMessage response = client.PostAsync(baseAddress + "api/client/createclient", byteContent).Result;
-
-            Console.WriteLine(response);
-            Console.WriteLine(response.Content.ReadAsStringAsync().Result);
         }
     }
 }
