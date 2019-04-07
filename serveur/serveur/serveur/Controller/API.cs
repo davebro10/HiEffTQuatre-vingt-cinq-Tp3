@@ -68,11 +68,12 @@ namespace serveur.Models
             return client;
         }
 
+        /// <exception cref="Exception"/>
         public List<Client> GetAllClient()
         {
+            List<Client> lst = new List<Client>();
             try
             {
-                List<Client> lst = new List<Client>();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM client");
                 using (MySqlDataReader reader = ExecuteReader(cmd))
                 {
@@ -81,16 +82,15 @@ namespace serveur.Models
                         Client c = ReaderToClient(reader);
                         lst.Add(c);
                     }
-
-                    bdd.CloseConnection();
-                    return lst;
                 }
             }
             catch (Exception ex)
             {
-                bdd.CloseConnection();
-                throw ex;
+                Console.Error.WriteLine(ex.Message);
             }
+
+            bdd.CloseConnection();
+            return lst;
         }
 
         public bool CreateClient(Client c)
@@ -209,11 +209,12 @@ namespace serveur.Models
             return inv;
         }
 
+        /// <exception cref="Exception"/>
         public List<Groupe> GetAllGroup()
         {
+            List<Groupe> lst = new List<Groupe>();
             try
             {
-                List<Groupe> lst = new List<Groupe>();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM groupe");
                 using (var reader = ExecuteReader(cmd))
                 {
@@ -222,16 +223,14 @@ namespace serveur.Models
                         Groupe g = ReaderToGroup(reader);
                         lst.Add(g);
                     }
-
-                    bdd.CloseConnection();
-                    return lst;
                 }
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                bdd.CloseConnection();
-                throw ex;
+                Console.Error.WriteLine(ex.Message);
             }
+            bdd.CloseConnection();
+            return lst;
         }
 
         public bool CreateGroup(Groupe g)
@@ -316,9 +315,9 @@ namespace serveur.Models
 
         public List<Invitation> GetAllInvitation()
         {
+            List<Invitation> lst = new List<Invitation>();
             try
             {
-                List<Invitation> lst = new List<Invitation>();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM invitation");
                 using (MySqlDataReader reader = ExecuteReader(cmd))
                 {
@@ -327,16 +326,14 @@ namespace serveur.Models
                         Invitation inv = ReaderToInvitation(reader);
                         lst.Add(inv);
                     }
-
-                    bdd.CloseConnection();
-                    return lst;
                 }
             }
             catch (Exception ex)
             {
-                bdd.CloseConnection();
-                throw ex;
+                Console.Error.WriteLine(ex.Message);
             }
+            bdd.CloseConnection();
+            return lst;
         }
 
         public Invitation GetInvitation(int id_invitation)
@@ -361,9 +358,9 @@ namespace serveur.Models
 
         public List<Invitation> GetInvitationByClient(int id_client)
         {
+            List<Invitation> lst = new List<Invitation>();
             try
             {
-                List<Invitation> lst = new List<Invitation>();
                 MySqlCommand cmd = new MySqlCommand("SELECT * FROM invitation WHERE id_client_fk=@id_client");
                 cmd.Parameters.AddWithValue("@id_client", id_client);
                 using (var reader = ExecuteReader(cmd))
@@ -373,16 +370,15 @@ namespace serveur.Models
                         Invitation inv = ReaderToInvitation(reader);
                         lst.Add(inv);
                     }
-
-                    bdd.CloseConnection();
-                    return lst;
                 }
             }
             catch (Exception ex)
             {
-                bdd.CloseConnection();
-                throw ex;
+                Console.Error.WriteLine(ex.Message);
             }
+
+            bdd.CloseConnection();
+            return lst;
         }
 
         public bool InviteMemberToGroup(int id_groupe, int id_client)
@@ -436,9 +432,9 @@ namespace serveur.Models
 
         public List<Client> GetGroupMember(int id_groupe)
         {
+            List<Client> lst = new List<Client>();
             try
             {
-                List<Client> lst = new List<Client>();
                 string query = "SELECT * FROM liste_groupe_client WHERE id_groupe_fk=@id_groupe";
                 MySqlCommand cmd = new MySqlCommand(query);
                 cmd.Parameters.AddWithValue("@id_groupe", id_groupe);
@@ -460,15 +456,14 @@ namespace serveur.Models
                     Client c = GetClient(id_client);
                     lst.Add(c);
                 }
-
-                bdd.CloseConnection();
-                return lst;
             }
             catch (Exception ex)
             {
-                bdd.CloseConnection();
-                throw ex;
+                Console.Error.WriteLine(ex.Message);
             }
+
+            bdd.CloseConnection();
+            return lst;
         }
 
         public bool RemoveMemberFromGroup(int id_groupe, int id_client)

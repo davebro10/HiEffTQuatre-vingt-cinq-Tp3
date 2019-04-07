@@ -14,46 +14,35 @@ namespace serveur
         // GET api/groupe/getallgroup
         public List<Groupe> GetAllGroup()
         {
-            List<Groupe> lstc = new List<Groupe>();
-
-            API api = new API();
-            lstc = api.GetAllGroup();
-
-            return lstc;
+             return new API().GetAllGroup();
         }
 
         [HttpPost]
         // POST api/groupe/creategroup
         public bool CreateGroup(Groupe g)
         {
-            API api = new API();
-            return api.CreateGroup(g);
+            return new API().CreateGroup(g);
         }
 
         [HttpPost]
         // POST api/groupe/modifygroup
         public bool ModifyGroup(Groupe g)
         {
-            API api = new API();
-            return api.ModifyGroup(g);
+            return new API().ModifyGroup(g);
         }
 
         [HttpDelete]
         // POST api/groupe/deletegroup
         public bool DeleteGroup(Groupe g)
         {
-            API api = new API();
-            return api.DeleteGroup(g);
+            return new API().DeleteGroup(g);
         }
 
         [HttpGet]
         // GET api/groupe/getgroup/{id}
         public Groupe GetGroup(int id)
         {
-            API api = new API();
-            Groupe g = api.GetGroup(id);
-
-            return g;
+            return new API().GetGroup(id);
         }
     }
 }

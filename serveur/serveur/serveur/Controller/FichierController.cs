@@ -15,6 +15,13 @@ namespace serveur
     public class FichierController : ApiController
     {
 
+
+        /// <summary>
+        /// Upload a file on the server
+        /// </summary>
+        /// <exception cref="HttpResponseException"/>
+        /// 
+        /// <returns></returns>
         [HttpPost]
         public async Task<IHttpActionResult> Upload()
         {
@@ -29,7 +36,7 @@ namespace serveur
             byte[] fileBytes = null;
             foreach (var file in provider.Contents)
             {
-                if (file.Headers.ContentDisposition.FileName != null)
+                if (file.Headers?.ContentDisposition?.FileName != null)
                 {
                     filename = file.Headers.ContentDisposition.FileName.Trim('\"');
                     fileBytes = await file.ReadAsByteArrayAsync();
@@ -83,7 +90,7 @@ namespace serveur
                             }
                             catch (System.IO.IOException e)
                             {
-                                Console.WriteLine(e.Message);
+                                Console.Error.WriteLine(e.Message);
                             }
                         }
                     }
@@ -109,16 +116,14 @@ namespace serveur
         // POST api/fichier/createfile
         public bool CreateFile(Fichier f)
         {
-            API api = new API();
-            return api.CreateFile(f);
+            return new API().CreateFile(f);
         }
 
         [HttpPost]
         // POST api/fichier/modifyfile
         public bool ModifyFile(Fichier f)
         {
-            API api = new API();
-            return api.ModifyFile(f);
+            return new API().ModifyFile(f);
         }
 
         [HttpDelete]
@@ -140,25 +145,19 @@ namespace serveur
                     }
                     catch (System.IO.IOException e)
                     {
-                        Console.WriteLine(e.Message);
+                        Console.Error.WriteLine(e.Message);
                     }
                 }
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         [HttpGet]
         // GET api/fichier/getfile/{id}
         public Fichier GetFile(int id)
         {
-            API api = new API();
-            Fichier f = api.GetFile(id);
-
-            return f;
+            return new API().GetFile(id);
         }
     }
 }

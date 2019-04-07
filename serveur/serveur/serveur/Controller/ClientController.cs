@@ -14,64 +14,49 @@ namespace serveur
         // GET api/client/getallclient
         public List<Client> GetAllClient()
         {
-            List<Client> lstc = new List<Client>();
-
-            API api = new API();
-            lstc = api.GetAllClient();
-
-            return lstc;
+            return new API().GetAllClient(); ;
         }
 
         [HttpPost]
         // POST api/client/createclient
         public bool CreateClient(Client c)
         {
-            API api = new API();
-            return api.CreateClient(c);
+            return new API().CreateClient(c);
         }
 
         [HttpPost]
         // POST api/client/modifyclient
         public bool ModifyClient(Client c)
         {
-            API api = new API();
-            return api.ModifyClient(c);
+            return new API().ModifyClient(c);
         }
 
         [HttpPost]
         // POST api/client/auth
         public Client Auth(Client c)
         {
-            API api = new API();
-            return api.Authentificate(c.usager,c.motdepasse);
+            return new API().Authentificate(c.usager,c.motdepasse);
         }
 
         [HttpDelete]
         // DELETE api/client/deleteclient
         public bool DeleteClient(Client c)
         {
-            API api = new API();
-            return api.DeleteClient(c);
+            return new API().DeleteClient(c);
         }
 
         [HttpGet]
         // GET api/client/getclient/{id}
         public Client GetClient(int id)
         {
-            API api = new API();
-            Client c = api.GetClient(id);
-
-            return c;
+            return new API().GetClient(id);
         }
 
         [HttpGet]
         // GET api/client/getclient?usager=
         public Client GetClient([FromUri]string usager)
         {
-            API api = new API();
-            Client c = api.GetClient(usager);
-
-            return c;
+            return new API().GetClient(usager);
         }
 
     }

@@ -27,7 +27,7 @@ namespace serveur.Models
             _conn = new MySqlConnection($"server={_server};user={_user};database={_database};port=3306;password={_password}");
         }
 
-        public bool OpenConnection()
+        public void OpenConnection()
         {
             try
             {
@@ -35,7 +35,6 @@ namespace serveur.Models
                 {
                     _conn.Open();
                 }
-                return true;
             }
             catch (Exception ex)
             {
@@ -43,7 +42,7 @@ namespace serveur.Models
             }
         }
 
-        public bool CloseConnection()
+        public void CloseConnection()
         {
             try
             {
@@ -51,7 +50,6 @@ namespace serveur.Models
                 {
                     _conn.Close();
                 }
-                return true;
             }
             catch (Exception ex)
             {
