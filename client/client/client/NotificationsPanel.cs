@@ -1,5 +1,4 @@
-﻿using client.API;
-using serveur.Models;
+﻿using serveur.Models;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -8,14 +7,10 @@ namespace client
 {
     public partial class NotificationsPanel : ApplicationPanel
     {
-        private readonly InvitationAPI _invitationApi;
-        private readonly GroupeAPI _groupeApi;
 
         public NotificationsPanel(MainForm parent)
             : base(parent)
         {
-            _invitationApi = new InvitationAPI();
-            _groupeApi = new GroupeAPI();
             InitializeComponent();
         }
 
@@ -28,12 +23,12 @@ namespace client
         {
             NotificationsListView.Items.Clear();
             int currentClientId = ActiveClient.id_client;
-            List<Invitation> invites = await _invitationApi.getInvitationsByClient(currentClientId);
+            List<Invitation> invites = await InvitationAPI.GetInvitationsByClient(currentClientId);
             if (invites != null)
             {
                 foreach (Invitation invite in invites)
                 {
-                    Groupe g = await _groupeApi.getGroupById(invite.id_groupe_fk);
+                    Groupe g = await GroupeAPI.GetGroupById(invite.id_groupe_fk);
                     if (g != null)
                     {
                         string[] rows = { invite.id_invitation.ToString(), g.nom };
@@ -58,7 +53,7 @@ namespace client
                 int invitationId = Int32.Parse(NotificationsListView.SelectedItems[0].Text);
                 Invitation invite = new Invitation();
                 invite.id_invitation = invitationId;
-                await _invitationApi.answerInviteAsync(invite, true);
+                await InvitationAPI.AnswerInviteAsync(invite, true);
             }
         }
 
@@ -68,7 +63,7 @@ namespace client
                 int invitationId = Int32.Parse(NotificationsListView.SelectedItems[0].Text);
                 Invitation invite = new Invitation();
                 invite.id_invitation = invitationId;
-                await _invitationApi.answerInviteAsync(invite, false);
+                await InvitationAPI.AnswerInviteAsync(invite, false);
             }
         }
 

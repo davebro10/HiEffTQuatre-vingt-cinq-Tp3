@@ -1,21 +1,21 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using serveur.Models;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Collections.Generic;
-using serveur.Models;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace client.API
 {
-    class InvitationAPI : API
+    public class InvitationAPI : API
     {
-        public async Task<List<Invitation>> getAllGroups()
+        public async Task<List<Invitation>> GetAllGroups()
         {
             try
             {
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/invitation/getallinvitation"))
+                using (HttpResponseMessage response = await client.GetAsync(BaseAddress + "api/invitation/getallinvitation"))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -30,12 +30,12 @@ namespace client.API
             return new List<Invitation>();
         }
 
-        public async Task<List<Invitation>> getInvitationsByClient(int id)
+        public async Task<List<Invitation>> GetInvitationsByClient(int id)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/invitation/getinvitationbyclient/" + id))
+                using (HttpResponseMessage response = await client.GetAsync(BaseAddress + "api/invitation/getinvitationbyclient/" + id))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -50,12 +50,12 @@ namespace client.API
             return new List<Invitation>();
         }
 
-        public async Task<List<Client>> getGroupMembers(int id)
+        public async Task<List<Client>> GetGroupMembers(int id)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/invitation/GetGroupMember?id_groupe=" + id))
+                using (HttpResponseMessage response = await client.GetAsync(BaseAddress + "api/invitation/GetGroupMember?id_groupe=" + id))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -70,7 +70,7 @@ namespace client.API
             return new List<Client>();
         }
 
-        public async Task inviteMemberToGroupAsync(int clientId, int groupId)
+        public async Task InviteMemberToGroupAsync(int clientId, int groupId)
         {
             Invitation i = new Invitation
             {
@@ -87,7 +87,7 @@ namespace client.API
                 using (var byteContent = new ByteArrayContent(buffer))
                 {
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    response = await client.PostAsync(baseAddress + "api/invitation/InviteMemberToGroup", byteContent);
+                    response = await client.PostAsync(BaseAddress + "api/invitation/InviteMemberToGroup", byteContent);
                 }
             }
             catch(Exception ex)
@@ -97,7 +97,7 @@ namespace client.API
             response?.Dispose();
         }
 
-        public async Task removeMemberToGroupAsync(int clientId, int groupId)
+        public async Task RemoveMemberToGroupAsync(int clientId, int groupId)
         {
             Invitation i = new Invitation
             {
@@ -113,7 +113,7 @@ namespace client.API
                 using (var request = new HttpRequestMessage())
                 {
                     request.Method = HttpMethod.Delete;
-                    request.RequestUri = new Uri(baseAddress + "api/invitation/RemoveMemberFromGroup");
+                    request.RequestUri = new Uri(BaseAddress + "api/invitation/RemoveMemberFromGroup");
                     request.Content = new StringContent(JsonConvert.SerializeObject(i), System.Text.Encoding.UTF8, "application/json");
                     response = await client.SendAsync(request);
                 }
@@ -125,7 +125,7 @@ namespace client.API
             response?.Dispose();
         }
 
-        public async Task answerInviteAsync(Invitation invite, bool answer)
+        public async Task AnswerInviteAsync(Invitation invite, bool answer)
         {
             invite.answer = answer;
             string jsonClient = JsonConvert.SerializeObject(invite);
@@ -138,7 +138,7 @@ namespace client.API
                 using (var byteContent = new ByteArrayContent(buffer))
                 {
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    response = await client.PostAsync(baseAddress + "api/invitation/InviteAnswer", byteContent);
+                    response = await client.PostAsync(BaseAddress + "api/invitation/InviteAnswer", byteContent);
                 }
             }
             catch(Exception ex)

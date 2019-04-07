@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using client.API;
 using serveur.Models;
 
 namespace client
@@ -15,7 +16,16 @@ namespace client
         protected ApplicationPanel(MainForm parent)
         {
             _parent = parent;
+            ClientAPI = new ClientAPI();
+            FichierAPI = new FichierAPI();
+            GroupeAPI = new GroupeAPI();
+            InvitationAPI = new InvitationAPI();
         }
+
+        protected ClientAPI ClientAPI { get; }
+        protected FichierAPI FichierAPI { get; }
+        protected GroupeAPI GroupeAPI { get; }
+        protected InvitationAPI InvitationAPI { get; }
 
 #if DEBUG
         [Obsolete("Designer Only", true)]

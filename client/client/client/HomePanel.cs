@@ -1,5 +1,4 @@
-﻿using client.API;
-using serveur.Models;
+﻿using serveur.Models;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,17 +8,10 @@ namespace client
 {
     public partial class HomePanel : ApplicationPanel
     {
-        private readonly ClientAPI _clientApi;
-        private readonly GroupeAPI _groupeApi;
-        private readonly InvitationAPI _invitationApi;
 
         public HomePanel(MainForm parent)
             : base(parent)
         {
-            _clientApi = new ClientAPI();
-            _groupeApi = new GroupeAPI();
-            _invitationApi = new InvitationAPI();
-
             InitializeComponent();
         }
 
@@ -32,14 +24,14 @@ namespace client
 
         private void SyncUserGroups()
         {
-            var allGroups = Task.Run(() => _groupeApi.getAllGroups()).Result;
+            var allGroups = Task.Run(() => GroupeAPI.GetAllGroups()).Result;
             if (allGroups == null)
                 return;
 
             var activeClientGroups = new List<Groupe>();
             foreach (var group in allGroups)
             {
-                var members = Task.Run(() => _invitationApi.getGroupMembers(group.id_groupe)).Result;
+                var members = Task.Run(() => InvitationAPI.GetGroupMembers(group.id_groupe)).Result;
                 if (ActiveClient == null || !members.Contains(ActiveClient) && @group.admin != ActiveClient.id_client)
                     continue;
 
@@ -59,12 +51,13 @@ namespace client
 
         private void SyncConnectedUsers()
         {
-            var allClients = Task.Run(() => _clientApi.getAllClients()).Result;
+            var allClients = Task.Run(() => ClientAPI.GetAllClients()).Result;
             if (allClients == null)
                 return;
 
             ClientsListView.Invoke((MethodInvoker) delegate
             {
+                ClientsListView.Items.Clear();
                 foreach (var client in allClients)
                 {
                     var tenMinutesFromNow = DateTime.Now.AddMinutes(10);
@@ -84,7 +77,7 @@ namespace client
             if (GroupesListView.SelectedItems.Count == 1)
             {
                 int selectedGroup = Int32.Parse(GroupesListView.SelectedItems[0].Text);
-                ActiveGroup = await _groupeApi.getGroupById(selectedGroup);
+                ActiveGroup = await GroupeAPI.GetGroupById(selectedGroup);
                 ChangeActivePanel(MainForm.Panel.Groupe);
             }
             else
@@ -102,7 +95,7 @@ namespace client
             if (groupName != "")
             {
                 int activeClientId = ActiveClient.id_client;
-                await _groupeApi.createGroup(groupName, activeClientId);
+                await GroupeAPI.CreateGroup(groupName, activeClientId);
                 // TODO : open group panel with group id??
             }
             else

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace client.API
+﻿namespace client.API
 {
-    class API
+    public class API
     {
-        protected string baseAddress = "http://localhost:10281/";
+        protected const string BaseAddress = "http://localhost:10281/";
     }
 }

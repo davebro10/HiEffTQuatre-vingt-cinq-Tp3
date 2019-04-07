@@ -1,26 +1,24 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using serveur.Models;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Collections.Generic;
-using serveur.Models;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 namespace client.API
 {
-    class GroupeAPI : API
+    public class GroupeAPI : API
     {
-        public async Task<List<Groupe>> getAllGroups()
+        public async Task<List<Groupe>> GetAllGroups()
         {
             try
             {
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/groupe/getallgroup"))
+                using (HttpResponseMessage response = await client.GetAsync(BaseAddress + "api/groupe/getallgroup"))
                 {
                     if (response.IsSuccessStatusCode)
-                    {
                         return await response.Content.ReadAsAsync<List<Groupe>>();
-                    }
                 }
             }
             catch(Exception ex)
@@ -29,17 +27,16 @@ namespace client.API
             }
             return new List<Groupe>();
         }
-        public async Task<Groupe> getGroupById(int id)
+
+        public async Task<Groupe> GetGroupById(int id)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/groupe/getgroup/" + id))
+                using (HttpResponseMessage response = await client.GetAsync(BaseAddress + "api/groupe/getgroup/" + id))
                 {
                     if (response.IsSuccessStatusCode)
-                    {
                         return await response.Content.ReadAsAsync<Groupe>();
-                    }
                 }
             }
             catch(Exception ex)
@@ -49,11 +46,11 @@ namespace client.API
             return null;
         }
 
-        public async Task createGroup(string name, int admin_id)
+        public async Task CreateGroup(string name, int adminId)
         {
             Groupe g = new Groupe();
             g.nom = name;
-            g.admin = admin_id;
+            g.admin = adminId;
             var jsonObj = JsonConvert.SerializeObject(g);
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
             HttpResponseMessage response = null;
@@ -64,7 +61,7 @@ namespace client.API
                 using (var byteContent = new ByteArrayContent(buffer))
                 {
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    response = await client.PostAsync(baseAddress + "api/groupe/creategroup", byteContent);
+                    response = await client.PostAsync(BaseAddress + "api/groupe/creategroup", byteContent);
                 }
             }
             catch(Exception ex)
@@ -74,7 +71,7 @@ namespace client.API
             response?.Dispose();
         }
 
-        public async Task modifyGroupAsync(Groupe g)
+        public async Task ModifyGroupAsync(Groupe g)
         {
             var jsonObj = JsonConvert.SerializeObject(g);
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonObj);
@@ -86,7 +83,7 @@ namespace client.API
                 using (var byteContent = new ByteArrayContent(buffer))
                 {
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    response = await client.PostAsync(baseAddress + "api/groupe/modifygroup", byteContent);
+                    response = await client.PostAsync(BaseAddress + "api/groupe/modifygroup", byteContent);
                 }
             }
             catch(Exception ex)
@@ -97,7 +94,7 @@ namespace client.API
             response?.Dispose();
         }
 
-        public async Task deleteGroupAsync(Groupe g)
+        public async Task DeleteGroupAsync(Groupe g)
         {
             HttpResponseMessage response = null;
             try
@@ -107,7 +104,7 @@ namespace client.API
                 {
 
                     request.Method = HttpMethod.Delete;
-                    request.RequestUri = new Uri(baseAddress + "api/groupe/deletegroup");
+                    request.RequestUri = new Uri(BaseAddress + "api/groupe/deletegroup");
                     request.Content = new StringContent(JsonConvert.SerializeObject(g), System.Text.Encoding.UTF8, "application/json");
 
                     response = await client.SendAsync(request);

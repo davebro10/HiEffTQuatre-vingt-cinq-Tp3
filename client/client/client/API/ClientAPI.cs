@@ -1,25 +1,24 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
+using serveur.Models;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using serveur.Models;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace client.API
 {
-    class ClientAPI : API
+    public class ClientAPI : API
     {
-        public async Task<List<Client>> getAllClients() {
+        public async Task<List<Client>> GetAllClients()
+        {
             try
             {
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getallclient/"))
+                using (HttpResponseMessage response = await client.GetAsync(BaseAddress + "api/client/getallclient/"))
                 {
                     if (response.IsSuccessStatusCode)
-                    {
                         return await response.Content.ReadAsAsync<List<Client>>();
-                    }
                 }
             }
             catch(Exception ex)
@@ -29,12 +28,12 @@ namespace client.API
             return new List<Client>();
         }
 
-        public async Task<Client> getClientById(int id)
+        public async Task<Client> GetClientById(int id)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getclient/" + id))
+                using (HttpResponseMessage response = await client.GetAsync(BaseAddress + "api/client/getclient/" + id))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -49,12 +48,12 @@ namespace client.API
             return null;
         }
 
-        public async Task<Client> getClientByUser(string user)
+        public async Task<Client> GetClientByUser(string user)
         {
             try
             {
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.GetAsync(baseAddress + "api/client/getclient?usager=" + user))
+                using (HttpResponseMessage response = await client.GetAsync(BaseAddress + "api/client/getclient?usager=" + user))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -69,7 +68,7 @@ namespace client.API
             return null;
         }
 
-        public async Task<Client> auth(Client c)
+        public async Task<Client> Auth(Client c)
         {
             try
             {
@@ -78,7 +77,7 @@ namespace client.API
                 var byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.PostAsync(baseAddress + "api/client/auth/", byteContent))
+                using (HttpResponseMessage response = await client.PostAsync(BaseAddress + "api/client/auth/", byteContent))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -94,7 +93,8 @@ namespace client.API
             return null;
         }
 
-        public async Task createClientAsync(Client newClient) {
+        public async Task CreateClientAsync(Client newClient)
+        {
             Client c = new Client();
             c.nom = newClient.nom;
             c.usager = newClient.usager;
@@ -110,7 +110,7 @@ namespace client.API
                 using(var byteContent = new ByteArrayContent(buffer))
                 {
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    response = await client.PostAsync(baseAddress + "api/client/createclient", byteContent);
+                    response = await client.PostAsync(BaseAddress + "api/client/createclient", byteContent);
                 }
             }
             catch(Exception ex)
@@ -120,7 +120,7 @@ namespace client.API
             response?.Dispose();
         }
 
-        public async Task modifyClientAsync(Client clientToModify)
+        public async Task ModifyClientAsync(Client clientToModify)
         {
             Client c = new Client();
             c.id_client = clientToModify.id_client;
@@ -138,7 +138,7 @@ namespace client.API
                 using (var byteContent = new ByteArrayContent(buffer))
                 {
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    response = await client.PostAsync(baseAddress + "api/client/modifyclient", byteContent);
+                    response = await client.PostAsync(BaseAddress + "api/client/modifyclient", byteContent);
                 }
             }
             catch(Exception ex)
@@ -148,7 +148,7 @@ namespace client.API
             response?.Dispose();
         }
 
-        public void deleteClient(Client clientToDelete)
+        public void DeleteClient(Client clientToDelete)
         {
             Client c = new Client();
             c.id_client = clientToDelete.id_client;
@@ -163,7 +163,7 @@ namespace client.API
                 using (var request = new HttpRequestMessage())
                 {
                     request.Method = HttpMethod.Delete;
-                    request.RequestUri = new Uri(baseAddress + "api/client/deleteclient");
+                    request.RequestUri = new Uri(BaseAddress + "api/client/deleteclient");
                     request.Content = new StringContent(JsonConvert.SerializeObject(c), System.Text.Encoding.UTF8, "application/json");
 
                     response = client.SendAsync(request).Result;

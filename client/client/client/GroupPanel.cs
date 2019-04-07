@@ -4,16 +4,11 @@ namespace client
 {
     public partial class GroupPanel : ApplicationPanel
     {
-        //public groupe SelectedGroup { get; set; }
-
         public GroupPanel(MainForm parent)
             : base(parent)
         {
-            //SelectedGroup = Service.LstGroupes[1];
-
             InitializeComponent();
             Dock = DockStyle.Fill;
-            Synchronize();
 
             FileListView.Columns.Add("ID");
             FileListView.Columns.Add("Nom");
@@ -29,12 +24,15 @@ namespace client
 
         private void SyncGroup()
         {
-            //GroupNameLabel.Text = SelectedGroup.nom;
-            //AdminNameLabel.Text = SelectedGroup.admin.ToString();
+            GroupNameLabel.Text = ActiveGroup.nom;
+            AdminNameLabel.Text = ActiveGroup.admin.ToString();
         }
 
         private void SyncFiles()
         {
+            //var files = Task.Run(() => )
+
+
          /*   var files = Service.Lstfichiers;
 
             FileListView.Clear();

@@ -1,17 +1,14 @@
-﻿using client.API;
-using serveur.Models;
+﻿using serveur.Models;
 using System;
 
 namespace client
 {
     public partial class ConnectionPanel : ApplicationPanel
     {
-        private readonly ClientAPI _clientApi;
 
         public ConnectionPanel(MainForm parent)
             : base(parent)
         {
-            _clientApi = new ClientAPI();
             InitializeComponent();
             ErrorMessage.Text = "";
         }
@@ -29,7 +26,7 @@ namespace client
         private async void Authenticate(Client tentativeClient)
         {
             ErrorMessage.Text = "";
-            Client authClient = await _clientApi.auth(tentativeClient);
+            Client authClient = await ClientAPI.Auth(tentativeClient);
 
             if (authClient != null)
             {
