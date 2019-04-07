@@ -64,7 +64,7 @@ namespace client.API
                 using (var byteContent = new ByteArrayContent(buffer))
                 {
                     byteContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                    response = await client.PostAsync(baseAddress + "api/client/creategroup", byteContent);
+                    response = await client.PostAsync(baseAddress + "api/groupe/creategroup", byteContent);
                 }
             }
             catch(Exception ex)

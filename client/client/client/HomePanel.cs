@@ -45,8 +45,9 @@ namespace client
             {
                 foreach (Groupe group in groups)
                 {
+                    Client activeClient = mainFormRef.ActiveClient;
                     List<Client> members = await invitationAPI.getGroupMembers(group.id_groupe);
-                    if (members.Contains(mainFormRef.ActiveClient))
+                    if (activeClient != null && (members.Contains(activeClient) || group.admin == activeClient.id_client))
                     {
                         string[] rows = { group.id_groupe.ToString(), group.nom };
                         GroupesListView.Items.Add(new ListViewItem(rows));
