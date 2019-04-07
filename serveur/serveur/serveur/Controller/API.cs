@@ -514,6 +514,26 @@ namespace serveur.Models
             }
         }
 
+        public List<Fichier> GetFileFromGroup(int id_groupe)
+        {
+            List<Fichier> lstFile = new List<Fichier>();
+            string query = "SELECT * FROM fichier WHERE id_groupe_fk=@id_groupe";
+            MySqlCommand cmd = new MySqlCommand(query);
+            cmd.Parameters.AddWithValue("@id_groupe", id_groupe);
+
+            using (var reader = ExecuteReader(cmd))
+            {
+                while (reader.Read())
+                {
+                    Fichier fichier = ReaderToFile(reader);
+                    lstFile.Add(fichier);
+                }
+            }
+
+            bdd.CloseConnection();
+            return lstFile;
+        }
+
         public bool CreateFile(Fichier file)
         {
             string query = "INSERT INTO fichier(id_groupe_fk, nom) VALUES(@id_groupe_fk,@nom)";

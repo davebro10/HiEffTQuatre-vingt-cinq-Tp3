@@ -680,6 +680,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "http://localhost:10281/api/fichier/GetFileFromGroup?id_groupe=1",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:10281/api/fichier/GetFileFromGroup?id_groupe=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10281",
+							"path": [
+								"api",
+								"fichier",
+								"GetFileFromGroup"
+							],
+							"query": [
+								{
+									"key": "id_groupe",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

@@ -159,6 +159,13 @@ namespace serveur
         {
             return new API().GetFile(id);
         }
+
+        [HttpGet]
+        // GET api/fichier/GetFileFromGroup?id_groupe=
+        public List<Fichier> GetFileFromGroup([FromUri]int id_groupe)
+        {
+            return new API().GetFileFromGroup(id_groupe);
+        }
     }
 }
 
