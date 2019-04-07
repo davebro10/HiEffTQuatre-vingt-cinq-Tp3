@@ -16,7 +16,7 @@ namespace client
         private readonly NotificationsPanel _notificationsPanel;
 
         public Client ActiveClient { get; set; }
-        public int ActiveGroup { get; set; }
+        public Groupe ActiveGroup { get; set; }
         
         public enum Panel
         {
