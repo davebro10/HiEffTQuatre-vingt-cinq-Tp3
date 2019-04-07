@@ -66,7 +66,8 @@ namespace client
             if (clients != null) {
                 foreach (Client client in clients)
                 {
-                    string[] rows = { client.nom };
+                    string status = client.action != null ? "En ligne" : "Hors ligne";
+                    string[] rows = { client.nom, status };
                     ClientsListView.Items.Add(new ListViewItem(rows));
                 }
             }
@@ -107,6 +108,11 @@ namespace client
         private void notificationsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
             mainFormRef.CurrentPanel = MainForm.Panel.Notification;
+        }
+
+        private void ClientsListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

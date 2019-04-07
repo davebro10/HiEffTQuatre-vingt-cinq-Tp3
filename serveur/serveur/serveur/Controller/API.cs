@@ -546,7 +546,15 @@ namespace serveur.Models
             Client client = GetClient(username);
             if (client != null && client.motdepasse == password)
             {
-                return client;
+                client.action = DateTime.Now;
+                if (ModifyClient(client))
+                {
+                    return client;
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {

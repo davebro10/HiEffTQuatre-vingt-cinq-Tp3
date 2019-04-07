@@ -31,16 +31,17 @@
             this.NameLabel = new System.Windows.Forms.Label();
             this.GroupesLabel = new System.Windows.Forms.Label();
             this.GroupesListView = new System.Windows.Forms.ListView();
+            this.ID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Nom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.NomClientLabel = new System.Windows.Forms.Label();
             this.VoirGroupeButton = new System.Windows.Forms.Button();
             this.CreerButton = new System.Windows.Forms.Button();
             this.ClientsListView = new System.Windows.Forms.ListView();
+            this.ClientName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.groupeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notificationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.Nom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.ClientName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Connecte = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,6 +76,14 @@
             this.GroupesListView.UseCompatibleStateImageBehavior = false;
             this.GroupesListView.View = System.Windows.Forms.View.Details;
             // 
+            // ID
+            // 
+            this.ID.Text = "ID";
+            // 
+            // Nom
+            // 
+            this.Nom.Text = "Nom";
+            // 
             // NomClientLabel
             // 
             this.NomClientLabel.AutoSize = true;
@@ -107,7 +116,8 @@
             // ClientsListView
             // 
             this.ClientsListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.ClientName});
+            this.ClientName,
+            this.Connecte});
             this.ClientsListView.Location = new System.Drawing.Point(342, 41);
             this.ClientsListView.MultiSelect = false;
             this.ClientsListView.Name = "ClientsListView";
@@ -115,6 +125,12 @@
             this.ClientsListView.TabIndex = 6;
             this.ClientsListView.UseCompatibleStateImageBehavior = false;
             this.ClientsListView.View = System.Windows.Forms.View.Details;
+            this.ClientsListView.SelectedIndexChanged += new System.EventHandler(this.ClientsListView_SelectedIndexChanged);
+            // 
+            // ClientName
+            // 
+            this.ClientName.Text = "Nom";
+            this.ClientName.Width = 80;
             // 
             // menuStrip1
             // 
@@ -140,18 +156,10 @@
             this.notificationsToolStripMenuItem.Text = "Notifications";
             this.notificationsToolStripMenuItem.Click += new System.EventHandler(this.notificationsToolStripMenuItem_Click);
             // 
-            // Nom
+            // Connecte
             // 
-            this.Nom.Text = "Nom";
-            // 
-            // ID
-            // 
-            this.ID.Text = "ID";
-            // 
-            // ClientName
-            // 
-            this.ClientName.Text = "Nom";
-            this.ClientName.Width = 150;
+            this.Connecte.Text = "Connecté?";
+            this.Connecte.Width = 70;
             // 
             // HomePanel
             // 
@@ -189,5 +197,6 @@
         private System.Windows.Forms.ColumnHeader ID;
         private System.Windows.Forms.ColumnHeader Nom;
         private System.Windows.Forms.ColumnHeader ClientName;
+        private System.Windows.Forms.ColumnHeader Connecte;
     }
 }
