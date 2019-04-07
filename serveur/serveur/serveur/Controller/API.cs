@@ -239,8 +239,12 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@admin", g.admin);
             cmd.Parameters.AddWithValue("@nom", g.nom);
-
-            return ExecuteNonQuery(cmd);
+            bool success = ExecuteNonQuery(cmd);
+            if(success && cmd.LastInsertedId != 0)
+            {
+                AddMemberToGroup((int)cmd.LastInsertedId, g.admin);
+            }
+            return success;
         }
 
         public bool ModifyGroup(Groupe g)
