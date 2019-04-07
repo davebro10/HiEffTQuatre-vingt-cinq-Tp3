@@ -33,7 +33,7 @@ namespace client
             InitializeComponent();
 
             _homePanel = new HomePanel(this);
-            _groupPanel = new GroupPanel();
+            _groupPanel = new GroupPanel(this);
             _connectionPanel = new ConnectionPanel(this);
             _notificationsPanel = new NotificationsPanel(this);
             CurrentPanel = Panel.Connection;
@@ -54,7 +54,7 @@ namespace client
                         ActivePanel.Controls.Add(new HomePanel(this));
                         break;
                     case Panel.Groupe:
-                        ActivePanel.Controls.Add(new GroupPanel());
+                        ActivePanel.Controls.Add(new GroupPanel(this));
                         break;
                     case Panel.Connection:
                         ActivePanel.Controls.Add(new ConnectionPanel(this));

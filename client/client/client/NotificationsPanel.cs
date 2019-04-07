@@ -1,40 +1,39 @@
-﻿using System.Windows.Forms;
-using System.Collections.Generic;
-using System;
-using client.API;
+﻿using client.API;
 using serveur.Models;
+using System;
+using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace client
 {
-    public partial class NotificationsPanel : UserControl, ISynchronizable
+    public partial class NotificationsPanel : ApplicationPanel
     {
-        private MainForm mainFormRef;
-        private InvitationAPI invitationAPI;
-        private GroupeAPI groupeAPI;
+        private readonly InvitationAPI _invitationApi;
+        private readonly GroupeAPI _groupeApi;
 
-        public NotificationsPanel(MainForm reference)
+        public NotificationsPanel(MainForm parent)
+            : base(parent)
         {
-            mainFormRef = reference;
-            invitationAPI = new InvitationAPI();
-            groupeAPI = new GroupeAPI();
+            _invitationApi = new InvitationAPI();
+            _groupeApi = new GroupeAPI();
             InitializeComponent();
         }
 
-        public void Synchronize()
+        public override void Synchronize()
         {
-            getInvitations();
+            GetInvitations();
         }
 
-        private async void getInvitations()
+        private async void GetInvitations()
         {
             NotificationsListView.Items.Clear();
-            int currentClientId = mainFormRef.ActiveClient.id_client;
-            List<Invitation> invites = await invitationAPI.getInvitationsByClient(currentClientId);
+            int currentClientId = ActiveClient.id_client;
+            List<Invitation> invites = await _invitationApi.getInvitationsByClient(currentClientId);
             if (invites != null)
             {
                 foreach (Invitation invite in invites)
                 {
-                    Groupe g = await groupeAPI.getGroupById(invite.id_groupe_fk);
+                    Groupe g = await _groupeApi.getGroupById(invite.id_groupe_fk);
                     if (g != null)
                     {
                         string[] rows = { invite.id_invitation.ToString(), g.nom };
@@ -59,7 +58,7 @@ namespace client
                 int invitationId = Int32.Parse(NotificationsListView.SelectedItems[0].Text);
                 Invitation invite = new Invitation();
                 invite.id_invitation = invitationId;
-                await invitationAPI.answerInviteAsync(invite, true);
+                await _invitationApi.answerInviteAsync(invite, true);
             }
         }
 
@@ -69,13 +68,13 @@ namespace client
                 int invitationId = Int32.Parse(NotificationsListView.SelectedItems[0].Text);
                 Invitation invite = new Invitation();
                 invite.id_invitation = invitationId;
-                await invitationAPI.answerInviteAsync(invite, false);
+                await _invitationApi.answerInviteAsync(invite, false);
             }
         }
 
         private void BackButton_Click(object sender, System.EventArgs e)
         {
-            mainFormRef.CurrentPanel = MainForm.Panel.Home;
+            ChangeActivePanel(MainForm.Panel.Home);
         }
     }
 }

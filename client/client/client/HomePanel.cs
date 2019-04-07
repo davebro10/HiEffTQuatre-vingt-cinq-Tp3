@@ -1,52 +1,53 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using serveur.Models;
 using client.API;
 
 namespace client
 {
-    public partial class HomePanel : UserControl, ISynchronizable
+    public partial class HomePanel : ApplicationPanel
     {
-        private MainForm mainFormRef;
-        private ClientAPI clientAPI;
-        private GroupeAPI groupeAPI;
-        private InvitationAPI invitationAPI;
+        private readonly ClientAPI _clientApi;
+        private readonly GroupeAPI _groupeApi;
+        private readonly InvitationAPI _invitationApi;
 
-        public HomePanel(MainForm reference)
+        public HomePanel(MainForm parent)
+            : base(parent)
         {
-            mainFormRef = reference;
-            clientAPI = new ClientAPI();
-            groupeAPI = new GroupeAPI();
-            invitationAPI = new InvitationAPI();
+            _clientApi = new ClientAPI();
+            _groupeApi = new GroupeAPI();
+            _invitationApi = new InvitationAPI();
 
             InitializeComponent();
-            updateClientName();
+            UpdateClientName();
 
             Synchronize();
         }
 
-        public void Synchronize()
+        public override void Synchronize()
         {
-            fetchUserGroups();
-            fetchConnectedUsers();
+            FetchUserGroups();
+            FetchConnectedUsers();
         }
 
-        public void updateClientName() {
-            Client activeClient = mainFormRef.ActiveClient;
+        public void UpdateClientName()
+        {
+            Client activeClient = ActiveClient;
             NomClientLabel.Text = activeClient != null && activeClient.nom != null ? activeClient.nom : "Anonyme";
         }
 
-        private async void fetchUserGroups()
+        private async Task FetchUserGroups()
         {
             GroupesListView.Items.Clear();
-            List<Groupe> groups = await groupeAPI.getAllGroups();
+            List<Groupe> groups = await _groupeApi.getAllGroups();
             if (groups != null)
             {
                 foreach (Groupe group in groups)
                 {
-                    Client activeClient = mainFormRef.ActiveClient;
-                    List<Client> members = await invitationAPI.getGroupMembers(group.id_groupe);
+                    Client activeClient = ActiveClient;
+                    List<Client> members = await _invitationApi.getGroupMembers(group.id_groupe);
                     if (activeClient != null && (members.Contains(activeClient) || group.admin == activeClient.id_client))
                     {
                         string[] rows = { group.id_groupe.ToString(), group.nom };
@@ -60,10 +61,12 @@ namespace client
             }
         }
 
-        private async void fetchConnectedUsers() {
+        private async Task FetchConnectedUsers()
+        {
             ClientsListView.Items.Clear();
-            List<Client> clients = await clientAPI.getAllClients();
-            if (clients != null) {
+            List<Client> clients = await _clientApi.getAllClients();
+            if (clients != null)
+            {
                 foreach (Client client in clients)
                 {
                     DateTime now = DateTime.Now;
@@ -86,7 +89,7 @@ namespace client
             {
                 int selectedGroup = Int32.Parse(GroupesListView.SelectedItems[0].Text);
                 // TODO: get group id and send group id to group panel
-                mainFormRef.CurrentPanel = MainForm.Panel.Groupe;
+                ChangeActivePanel(MainForm.Panel.Groupe);
             }
             else
             {
@@ -97,9 +100,10 @@ namespace client
         private async void CreerButton_ClickAsync(object sender, System.EventArgs e)
         {
             string groupName = Prompt.ShowDialog("Nom du groupe:", "");
-            if (groupName != "") {
-                int activeClientId = mainFormRef.ActiveClient.id_client;
-                await groupeAPI.createGroup(groupName, activeClientId);
+            if (groupName != "")
+            {
+                int activeClientId = ActiveClient.id_client;
+                await _groupeApi.createGroup(groupName, activeClientId);
                 // TODO : open group panel with group id??
             }
             else
@@ -110,7 +114,7 @@ namespace client
 
         private void notificationsToolStripMenuItem_Click(object sender, System.EventArgs e)
         {
-            mainFormRef.CurrentPanel = MainForm.Panel.Notification;
+            ChangeActivePanel(MainForm.Panel.Notification);
         }
 
         private void ClientsListView_SelectedIndexChanged(object sender, EventArgs e)

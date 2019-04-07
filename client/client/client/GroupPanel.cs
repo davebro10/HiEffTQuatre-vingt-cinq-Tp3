@@ -2,11 +2,12 @@
 
 namespace client
 {
-    public partial class GroupPanel : UserControl, ISynchronizable
+    public partial class GroupPanel : ApplicationPanel
     {
         //public groupe SelectedGroup { get; set; }
 
-        public GroupPanel()
+        public GroupPanel(MainForm parent)
+            : base(parent)
         {
             //SelectedGroup = Service.LstGroupes[1];
 
@@ -19,7 +20,7 @@ namespace client
             FileListView.Columns.Add("Groupe ID");
         }
 
-        public void Synchronize()
+        public override void Synchronize()
         {
             SyncGroup();
             SyncFiles();

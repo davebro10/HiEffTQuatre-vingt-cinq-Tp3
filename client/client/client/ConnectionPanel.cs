@@ -1,19 +1,17 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using client.API;
 using serveur.Models;
-using client.API;
+using System;
 
 namespace client
 {
-    public partial class ConnectionPanel : UserControl
+    public partial class ConnectionPanel : ApplicationPanel
     {
-        private MainForm mainFormReference;
-        private ClientAPI clientAPI;
+        private readonly ClientAPI _clientApi;
 
-        public ConnectionPanel(MainForm reference)
+        public ConnectionPanel(MainForm parent)
+            : base(parent)
         {
-            mainFormReference = reference;
-            clientAPI = new ClientAPI();
+            _clientApi = new ClientAPI();
             InitializeComponent();
             ErrorMessage.Text = "";
         }
@@ -25,18 +23,18 @@ namespace client
             string password = PasswordTextBox.Text;
             tentativeClient.usager = user;
             tentativeClient.motdepasse = password;
-            authenticate(tentativeClient);
+            Authenticate(tentativeClient);
         }
 
-        private async void authenticate(Client tentativeClient) {
+        private async void Authenticate(Client tentativeClient) {
             ErrorMessage.Text = "";
-            Client authClient = await clientAPI.auth(tentativeClient);
+            Client authClient = await _clientApi.auth(tentativeClient);
 
             if (authClient != null)
             {
                 // set as active client and change panel
-                mainFormReference.ActiveClient = authClient;
-                mainFormReference.CurrentPanel = MainForm.Panel.Home;
+                ActiveClient = authClient;
+                ChangeActivePanel(MainForm.Panel.Home);
             }
             else
             {
@@ -51,5 +49,8 @@ namespace client
         {
 
         }
+
+        public override void Synchronize() { }
+        
     }
 }

@@ -78,6 +78,9 @@
     <Compile Include="API\FichierAPI.cs" />
     <Compile Include="API\InvitationAPI.cs" />
     <Compile Include="API\GroupeAPI.cs" />
+    <Compile Include="ApplicationPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="ConnectionPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -115,7 +118,6 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Service.cs" />
     <EmbeddedResource Include="ConnectionPanel.resx">
       <DependentUpon>ConnectionPanel.cs</DependentUpon>
     </EmbeddedResource>
