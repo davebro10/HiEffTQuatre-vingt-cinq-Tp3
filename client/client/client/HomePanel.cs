@@ -1,9 +1,9 @@
-﻿using System;
-using System.Windows.Forms;
+﻿using client.API;
+using serveur.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using serveur.Models;
-using client.API;
+using System.Windows.Forms;
 
 namespace client
 {
@@ -21,83 +21,82 @@ namespace client
             _invitationApi = new InvitationAPI();
 
             InitializeComponent();
-            UpdateClientName();
-
-            Synchronize();
         }
 
         public override void Synchronize()
         {
-            FetchUserGroups();
-            FetchConnectedUsers();
+            NomClientLabel.Text = ActiveClient?.nom ?? "Anonyme";
+            SyncUserGroups();
+            SyncConnectedUsers();
         }
 
-        public void UpdateClientName()
+        private void SyncUserGroups()
         {
-            Client activeClient = ActiveClient;
-            NomClientLabel.Text = activeClient != null && activeClient.nom != null ? activeClient.nom : "Anonyme";
-        }
+            var allGroups = Task.Run(() => _groupeApi.getAllGroups()).Result;
+            if (allGroups == null)
+                return;
 
-        private async Task FetchUserGroups()
-        {
-            GroupesListView.Items.Clear();
-            List<Groupe> groups = await _groupeApi.getAllGroups();
-            if (groups != null)
+            var activeClientGroups = new List<Groupe>();
+            foreach (var group in allGroups)
             {
-                foreach (Groupe group in groups)
+                var members = Task.Run(() => _invitationApi.getGroupMembers(group.id_groupe)).Result;
+                if (ActiveClient == null || !members.Contains(ActiveClient) && @group.admin != ActiveClient.id_client)
+                    continue;
+
+                activeClientGroups.Add(group);
+            }
+
+            GroupesListView?.Invoke((MethodInvoker) delegate
+            {
+                GroupesListView.Items.Clear();
+                foreach (var group in activeClientGroups)
                 {
-                    Client activeClient = ActiveClient;
-                    List<Client> members = await _invitationApi.getGroupMembers(group.id_groupe);
-                    if (activeClient != null && (members.Contains(activeClient) || group.admin == activeClient.id_client))
-                    {
-                        string[] rows = { group.id_groupe.ToString(), group.nom };
-                        GroupesListView.Items.Add(new ListViewItem(rows));
-                    }
+                    string[] rows = { group.id_groupe.ToString(), group.nom };
+                    GroupesListView.Items.Add(new ListViewItem(rows));
                 }
-            }
-            else
-            {
-                DialogResult res = MessageBox.Show("La recherche des groupes a échoué", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            });
         }
 
-        private async Task FetchConnectedUsers()
+        private void SyncConnectedUsers()
         {
-            ClientsListView.Items.Clear();
-            List<Client> clients = await _clientApi.getAllClients();
-            if (clients != null)
+            var allClients = Task.Run(() => _clientApi.getAllClients()).Result;
+            if (allClients == null)
+                return;
+
+            ClientsListView.Invoke((MethodInvoker) delegate
             {
-                foreach (Client client in clients)
+                foreach (var client in allClients)
                 {
-                    DateTime now = DateTime.Now;
-                    DateTime tenMinutesFromNow = now.AddMinutes(10);
-                    bool isConnected = client.action != null && client.action < tenMinutesFromNow;
-                    string status = isConnected ? "En ligne" : "Hors ligne";
+                    var tenMinutesFromNow = DateTime.Now.AddMinutes(10);
+                    var status = client.action != null && client.action < tenMinutesFromNow
+                        ? "En ligne"
+                        : "Hors ligne";
                     string[] rows = { client.nom, status };
                     ClientsListView.Items.Add(new ListViewItem(rows));
                 }
-            }
-            else
-            {
-                DialogResult res = MessageBox.Show("La recherche des utilisateurs a échoué", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            });
         }
 
-        private void VoirGroupeButton_Click(object sender, System.EventArgs e)
+        private void VoirGroupeButton_Click(object sender, System.EventArgs e) => Task.Run(() => VoirGroupe(sender, e));
+
+        private async Task VoirGroupe(object sender, System.EventArgs e)
         {
             if (GroupesListView.SelectedItems.Count == 1)
             {
                 int selectedGroup = Int32.Parse(GroupesListView.SelectedItems[0].Text);
-                // TODO: get group id and send group id to group panel
+                ActiveGroup = await _groupeApi.getGroupById(selectedGroup);
                 ChangeActivePanel(MainForm.Panel.Groupe);
             }
             else
             {
                 DialogResult res = MessageBox.Show("Veuillez sélectionner un groupe.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+
         }
 
-        private async void CreerButton_ClickAsync(object sender, System.EventArgs e)
+        private void CreerButton_ClickAsync(object sender, System.EventArgs e) => Task.Run(() => CreerGroupe(sender, e));
+
+        private async Task CreerGroupe(object sender, System.EventArgs e)
         {
             string groupName = Prompt.ShowDialog("Nom du groupe:", "");
             if (groupName != "")

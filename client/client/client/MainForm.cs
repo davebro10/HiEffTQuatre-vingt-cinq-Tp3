@@ -51,20 +51,22 @@ namespace client
                 switch (_panel)
                 {
                     case Panel.Home:
-                        ActivePanel.Controls.Add(new HomePanel(this));
+                        ActivePanel.Controls.Add(_homePanel);
                         break;
                     case Panel.Groupe:
-                        ActivePanel.Controls.Add(new GroupPanel(this));
+                        ActivePanel.Controls.Add(_groupPanel);
                         break;
                     case Panel.Connection:
-                        ActivePanel.Controls.Add(new ConnectionPanel(this));
+                        ActivePanel.Controls.Add(_connectionPanel);
                         break;
                     case Panel.Notification:
-                        ActivePanel.Controls.Add(new NotificationsPanel(this));
+                        ActivePanel.Controls.Add(_notificationsPanel);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+
+                Synchronize();
             }
         }
 
@@ -72,9 +74,6 @@ namespace client
 
         public void Synchronize()
         {
-
-            //TODO: Synchroniser les fichiers sur le disque
-
             switch (CurrentPanel)
             {
                 case Panel.Home:
@@ -93,12 +92,18 @@ namespace client
             }
         }
 
+        private void SynchronizeFiles()
+        {
+            //TODO: Synchroniser les fichiers sur le disque dur
+        }
+
         public Task PeriodicSynchronization()
         {
             while (true)
             {
                 Console.WriteLine(@"Synchronisation");
                 Synchronize();
+                SynchronizeFiles();
                 Thread.Sleep(SYNCHRONIZATION_PERIOD);
             }
         }

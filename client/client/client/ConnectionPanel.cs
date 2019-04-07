@@ -26,7 +26,8 @@ namespace client
             Authenticate(tentativeClient);
         }
 
-        private async void Authenticate(Client tentativeClient) {
+        private async void Authenticate(Client tentativeClient)
+        {
             ErrorMessage.Text = "";
             Client authClient = await _clientApi.auth(tentativeClient);
 
