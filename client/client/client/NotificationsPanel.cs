@@ -15,6 +15,8 @@ namespace client
         public NotificationsPanel(MainForm reference)
         {
             mainFormRef = reference;
+            invitationAPI = new InvitationAPI();
+            groupeAPI = new GroupeAPI();
             InitializeComponent();
         }
 
@@ -33,11 +35,20 @@ namespace client
                 foreach (Invitation invite in invites)
                 {
                     Groupe g = await groupeAPI.getGroupById(invite.id_groupe_fk);
-                    if (g != null) {
+                    if (g != null)
+                    {
                         string[] rows = { invite.id_invitation.ToString(), g.nom };
                         NotificationsListView.Items.Add(new ListViewItem(rows));
                     }
+                    else
+                    {
+                        DialogResult res = MessageBox.Show("La recherche des groupes a échoué.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
                 }
+            }
+            else
+            {
+                DialogResult res = MessageBox.Show("La recherche des notifications a échoué.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 

@@ -46,11 +46,16 @@ namespace client
                 foreach (Groupe group in groups)
                 {
                     List<Client> members = await invitationAPI.getGroupMembers(group.id_groupe);
-                    if (members.Contains(mainFormRef.ActiveClient)) {
+                    if (members.Contains(mainFormRef.ActiveClient))
+                    {
                         string[] rows = { group.id_groupe.ToString(), group.nom };
                         GroupesListView.Items.Add(new ListViewItem(rows));
                     }
                 }
+            }
+            else
+            {
+                DialogResult res = MessageBox.Show("La recherche des groupes a échoué", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -64,14 +69,23 @@ namespace client
                     ClientsListView.Items.Add(new ListViewItem(rows));
                 }
             }
+            else
+            {
+                DialogResult res = MessageBox.Show("La recherche des utilisateurs connectés a échoué", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void VoirGroupeButton_Click(object sender, System.EventArgs e)
         {
-            if (GroupesListView.SelectedItems.Count == 1) {
+            if (GroupesListView.SelectedItems.Count == 1)
+            {
                 int selectedGroup = Int32.Parse(GroupesListView.SelectedItems[0].Text);
                 // TODO: get group id and send group id to group panel
                 mainFormRef.CurrentPanel = MainForm.Panel.Groupe;
+            }
+            else
+            {
+                DialogResult res = MessageBox.Show("Veuillez sélectionner un groupe.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -82,6 +96,10 @@ namespace client
                 int activeClientId = mainFormRef.ActiveClient.id_client;
                 await groupeAPI.createGroup(groupName, activeClientId);
                 // TODO : open group panel with group id??
+            }
+            else
+            {
+                DialogResult res = MessageBox.Show("Veuillez saisir un nom pour le groupe.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
