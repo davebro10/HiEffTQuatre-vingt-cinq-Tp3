@@ -11,6 +11,7 @@ namespace client
             //SelectedGroup = Service.LstGroupes[1];
 
             InitializeComponent();
+            Dock = DockStyle.Fill;
             Synchronize();
 
             FileListView.Columns.Add("ID");
