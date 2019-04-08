@@ -433,6 +433,7 @@ namespace serveur.Models
                 if (AddMemberToGroup(inv.id_groupe_fk, inv.id_client_fk))
                 {
                     DeleteInvitation(inv);
+                    LAST_TIME_SYNC_NOTIFS = DateTime.Now;
                     return true;
                 }
                 else
@@ -442,9 +443,9 @@ namespace serveur.Models
             }
             else
             {
+                LAST_TIME_SYNC_NOTIFS = DateTime.Now;
                 return DeleteInvitation(inv);
             }
-            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
         }
         public bool AddMemberToGroup(int id_groupe, int id_client)
         {

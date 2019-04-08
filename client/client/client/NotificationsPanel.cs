@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace client
 {
@@ -19,30 +20,42 @@ namespace client
             GetInvitations();
         }
 
-        private async void GetInvitations()
+        private void GetInvitations()
         {
-            NotificationsListView.Items.Clear();
-            int currentClientId = ActiveClient.id_client;
-            List<Invitation> invites = await InvitationAPI.GetInvitationsByClient(currentClientId);
-            if (invites != null)
+            var invites = Task.Run(() => InvitationAPI.GetInvitationsByClient(ActiveClient.id_client)).Result;
+            if (invites == null)
             {
-                foreach (Invitation invite in invites)
-                {
-                    Groupe g = await GroupeAPI.GetGroupById(invite.id_groupe_fk);
-                    if (g != null)
-                    {
-                        string[] rows = { invite.id_invitation.ToString(), g.nom };
-                        NotificationsListView.Items.Add(new ListViewItem(rows));
-                    }
-                    else
-                    {
-                        DialogResult res = MessageBox.Show("La recherche des groupes a échoué.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                }
+                DialogResult res = MessageBox.Show("La recherche des notifications a échoué.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
             else
             {
-                DialogResult res = MessageBox.Show("La recherche des notifications a échoué.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                NotificationsListView.Invoke((MethodInvoker)delegate
+                {
+                    NotificationsListView.Items.Clear();
+                    foreach (Invitation invite in invites)
+                    {
+                        var group = Task.Run(() => GroupeAPI.GetGroupById(invite.id_groupe_fk)).Result;
+                        if (group == null)
+                        {
+                            DialogResult res = MessageBox.Show("La recherche du groupe a échoué.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return;
+                        }
+                        else
+                        {
+                            NotificationsListView.Invoke((MethodInvoker)delegate
+                            {
+                                string[] rows = { invite.id_invitation.ToString(), group.nom };
+                                ListViewItem item = new ListViewItem(rows);
+                                item.Name = invite.id_invitation.ToString();
+                                if (!NotificationsListView.Items.ContainsKey(invite.id_invitation.ToString()))
+                                {
+                                    NotificationsListView.Items.Add(item);
+                                }
+                            });
+                        }
+                    }
+                });
             }
         }
 
