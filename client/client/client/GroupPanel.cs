@@ -32,7 +32,7 @@ namespace client
 
         private void SyncFiles()
         {
-            var files = Task.Run(() => FichierAPI.GetFilesFromGroup(ActiveGroup)).Result;
+            var files = Task.Run(() => FichierAPI.GetFilesFromGroup(ActiveGroup.id_groupe)).Result;
             if (files == null)
                 return;
 

@@ -19,10 +19,6 @@ namespace serveur.Models
         public API()
         {
             bdd = new BD();
-            LAST_TIME_SYNC_CLIENTS = DateTime.Now;
-            LAST_TIME_SYNC_FILES = DateTime.Now;
-            LAST_TIME_SYNC_GROUPS = DateTime.Now;
-            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
         }
 
         private bool ExecuteNonQuery(MySqlCommand cmd)
@@ -432,6 +428,7 @@ namespace serveur.Models
             {
                 if (AddMemberToGroup(inv.id_groupe_fk, inv.id_client_fk))
                 {
+                    LAST_TIME_SYNC_NOTIFS = DateTime.Now;
                     DeleteInvitation(inv);
                     return true;
                 }
@@ -444,7 +441,7 @@ namespace serveur.Models
             {
                 return DeleteInvitation(inv);
             }
-            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
+            
         }
         public bool AddMemberToGroup(int id_groupe, int id_client)
         {
@@ -552,7 +549,7 @@ namespace serveur.Models
                     lstFile.Add(fichier);
                 }
             }
-
+            LAST_TIME_SYNC_FILES = DateTime.Now;
             bdd.CloseConnection();
             return lstFile;
         }

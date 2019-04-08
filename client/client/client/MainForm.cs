@@ -9,6 +9,9 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace client
 {
@@ -26,6 +29,9 @@ namespace client
         public Client ActiveClient { get; set; }
         public Groupe ActiveGroup { get; set; }
         protected FichierAPI FichierAPI { get; }
+        protected GroupeAPI GroupeAPI { get; }
+        protected InvitationAPI InvitationAPI { get; }
+        
 
 
         public static DateTime LAST_TIME_SYNC_CLIENTS { get; set; }
@@ -56,6 +62,13 @@ namespace client
             CurrentPanel = Panel.Connection;
             UDPClient.Connect("localhost", UDP_PORT);
             FichierAPI = new FichierAPI();
+            GroupeAPI = new GroupeAPI();
+            InvitationAPI = new InvitationAPI();
+
+            LAST_TIME_SYNC_FILES = DateTime.Now;
+            LAST_TIME_SYNC_CLIENTS = DateTime.Now;
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
+            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
 
             Task.Run(PeriodicSynchronization);
         }
@@ -115,7 +128,28 @@ namespace client
         private async void SynchronizeFiles()
         {
             if (ActiveClient == null)
+            {
                 return;
+            }
+
+            //Create main repository
+            if (!Directory.Exists(ActiveClient.usager))
+            {
+                Directory.CreateDirectory(ActiveClient.usager);
+            }
+
+            // Create group's repositories
+            List<Groupe> groups = getUserGroups();
+            for(int i = 0; i < groups.Count; ++i)
+            {
+                if (!Directory.Exists(ActiveClient.usager + "/" + groups[i].id_groupe.ToString()))
+                {
+                    Directory.CreateDirectory(ActiveClient.usager + "/" + groups[i].id_groupe.ToString());
+                }
+            }
+
+
+            string[] dirs = Directory.GetDirectories(ActiveClient.usager);
 
             if (!Directory.Exists(ClientDirectoryName))
                 Directory.CreateDirectory(ClientDirectoryName);
@@ -137,27 +171,68 @@ namespace client
                 {
                     var parse = file.Split('\\');
                     await FichierAPI.Upload(File.ReadAllBytes(file), parse[2], groupId);
+                } 
+            }
+
+            dirs = Directory.GetDirectories(ActiveClient.usager);
+            for (int i = 0; i < dirs.Length; ++i)
+            {
+                // DirectoryInfo info = new DirectoryInfo(dirs[i]);
+                //DateTime dateTime = info.LastWriteTime;
+
+                Byte[] senddata = Encoding.ASCII.GetBytes("DOWNLOAD" + ";" + LAST_TIME_SYNC_FILES);
+                UDPClient.Send(senddata, senddata.Length);
+
+                Byte[] receiveBytes = UDPClient.Receive(ref IP_ENDPOINT);
+                string returnData = Encoding.ASCII.GetString(receiveBytes);
+                if (returnData == "YES")
+                {
+                    string resultString = Regex.Match(dirs[i], @"\d+").Value;
+                    int groupID = int.Parse(resultString);
+
+                    List<Fichier> files = await FichierAPI.GetFilesFromGroup(groupID);
+
+                    for (int j = 0; j < files.Count; ++j)
+                    {
+
+                        byte[] stream = await FichierAPI.Download(files[i].id_fichier);
+                        using (var ms = new MemoryStream(stream))
+                        {
+                            var img = Image.FromStream(ms);
+                            img.Save(dirs[i] + "/" + files[i].nom, ImageFormat.Jpeg);
+                        }
+
+                    }
+                }
+
+            }
+
+        }
+
+
+        private List<Groupe> getUserGroups()
+        {
+            var allGroups = Task.Run(() => GroupeAPI.GetAllGroups()).Result;
+            if (allGroups == null)
+                return null;
+
+            var activeClientGroups = new List<Groupe>();
+            foreach (var group in allGroups)
+            {
+                var members = Task.Run(() => InvitationAPI.GetGroupMembers(group.id_groupe)).Result;
+                foreach(var member in members)
+                {
+                    if(member.id_client == ActiveClient.id_client)
+                    {
+                        activeClientGroups.Add(group);
+                        break;
+                    }
                 }
             }
 
-
-            /*Byte[] senddata = Encoding.ASCII.GetBytes("SENDFICHIER" + ";" + LAST_TIME_SYNC_FILES);
-            UDPClient.Send(senddata, senddata.Length);
-
-            Byte[] receiveBytes = UDPClient.Receive(ref IP_ENDPOINT);
-            string returnData = Encoding.ASCII.GetString(receiveBytes);
-            if (returnData == "YES")
-            {
-
-                //SyncConnectedUsers();
-                //MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
-                //SyncUserGroups();
-            }*/
-
-            //byte[] bytes = File.ReadAllBytes("dave/heroes.jpg");
-
-            //await FichierAPI.Upload(bytes, "heroes.jpg", 1);
+            return activeClientGroups;
         }
+
 
 
         public Task PeriodicSynchronization()

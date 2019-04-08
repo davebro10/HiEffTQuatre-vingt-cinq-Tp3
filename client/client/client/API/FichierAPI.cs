@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace client.API
 {
@@ -56,6 +57,27 @@ namespace client.API
                 Console.Error.WriteLine(ex.Message);
             }
             response?.Dispose();
+        }
+
+        public async Task<byte[]> Download(int FileID)
+        {
+            try
+            {
+                HttpClient _client = new HttpClient();
+                HttpResponseMessage response = await _client.GetAsync(BaseAddress + "api/fichier/download?id_fichier=" + FileID);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadAsByteArrayAsync();
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            return null;
         }
 
         public async Task CreateFileAsync(Fichier f)
@@ -123,11 +145,22 @@ namespace client.API
             response?.Dispose();
         }
 
-        public async Task<List<Fichier>> GetFilesFromGroup(Groupe group)
+        public async Task<List<Fichier>> GetFilesFromGroup(int groupID)
         {
-            //TODO
-
-            return new List<Fichier>();
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                using (HttpResponseMessage response = await client.GetAsync(BaseAddress + "api/fichier/GetFileFromGroup?id_groupe=" + groupID))
+                {
+                    if (response.IsSuccessStatusCode)
+                        return await response.Content.ReadAsAsync<List<Fichier>>();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            return null;
         }
     }
 }
