@@ -112,6 +112,27 @@ namespace serveur
             return Ok();
         }
 
+        [HttpGet]
+        // GET api/fichier/download?id_fichier=
+        public HttpResponseMessage Download([FromUri]int id_fichier)
+        {
+            Fichier f = GetFile(id_fichier);
+            string pathString = Path.GetDirectoryName(Application.ExecutablePath);
+            pathString = Path.Combine(pathString, "groupfiles");
+            pathString = Path.Combine(pathString, f.id_groupe_fk.ToString());
+            pathString = Path.Combine(pathString, f.nom);
+
+            byte[] readBuffer = System.IO.File.ReadAllBytes(pathString);
+
+            HttpResponseMessage result = null;
+            result = Request.CreateResponse(HttpStatusCode.OK);
+            result.Content = new ByteArrayContent(readBuffer);
+            result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+            result.Content.Headers.ContentDisposition.FileName = f.nom;
+            return result;
+        }
+
+
         [HttpPost]
         // POST api/fichier/createfile
         public bool CreateFile(Fichier f)

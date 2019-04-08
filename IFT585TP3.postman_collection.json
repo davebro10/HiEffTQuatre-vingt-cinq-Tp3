@@ -711,6 +711,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "http://localhost:10281/api/fichier/download",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:10281/api/fichier/download?id_fichier=2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "10281",
+							"path": [
+								"api",
+								"fichier",
+								"download"
+							],
+							"query": [
+								{
+									"key": "id_fichier",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
