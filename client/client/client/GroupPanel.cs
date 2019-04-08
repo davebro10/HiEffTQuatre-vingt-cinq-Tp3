@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace client
@@ -26,7 +27,7 @@ namespace client
         private void SyncGroup()
         {
             GroupNameLabel.Text = ActiveGroup.nom;
-            AdminNameLabel.Text = ActiveGroup.admin.ToString();
+            AdminNameLabel.Text = Task.Run(() => ClientAPI.GetClientById(ActiveGroup.admin)).Result.usager;
         }
 
         private void SyncFiles()
@@ -54,7 +55,7 @@ namespace client
 
             MemberListBox.Invoke((MethodInvoker) delegate
             {
-                MemberListBox.ClearSelected();
+                MemberListBox.Items.Clear();
                 foreach (var member in members)
                     MemberListBox.Items.Add(member.usager);
             });
@@ -77,7 +78,15 @@ namespace client
 
         private void InviteButton_Click(object sender, System.EventArgs e)
         {
+            var allClients = Task.Run(() => ClientAPI.GetAllClients()).Result;
+            var groupClients = Task.Run(() => InvitationAPI.GetGroupMembers(ActiveGroup.id_groupe)).Result;
 
+            var invitationForm = new InvitationForm(allClients.Where(c => !groupClients.Contains(c)).ToList());
+            if (invitationForm.ShowDialog() != DialogResult.OK)
+                return;
+
+            foreach (var client in invitationForm.SelectedClients)
+                Task.Run(() => InvitationAPI.InviteMemberToGroupAsync(client.id_client, ActiveGroup.id_groupe));
         }
     }
 }

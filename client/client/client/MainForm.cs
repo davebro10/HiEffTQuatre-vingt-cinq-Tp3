@@ -1,29 +1,28 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using client.API;
 using serveur.Models;
+using System;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using client.API;
-using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace client
 {
     public partial class MainForm : Form, ISynchronizable
     {
         private const int SYNCHRONIZATION_PERIOD = 5000;
-        private readonly int UDP_PORT = 10282;
+        private const int UDP_PORT = 10282;
 
         private readonly HomePanel _homePanel;
         private readonly GroupPanel _groupPanel;
         private readonly ConnectionPanel _connectionPanel;
         private readonly NotificationsPanel _notificationsPanel;
 
-
+        private string ClientDirectoryName => $"..\\..\\..\\..\\{ActiveClient.usager}";
         public Client ActiveClient { get; set; }
         public Groupe ActiveGroup { get; set; }
         protected FichierAPI FichierAPI { get; }
@@ -45,7 +44,6 @@ namespace client
         }
 
         private Panel _panel;
-        bool test = false;
 
         public MainForm()
         {
@@ -107,6 +105,7 @@ namespace client
                     _notificationsPanel.Synchronize();
                     break;
                 case Panel.Connection:
+                    _connectionPanel.Synchronize();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -115,32 +114,32 @@ namespace client
 
         private async void SynchronizeFiles()
         {
-            string[] dirs = Directory.GetDirectories("dave");
-            for (int i = 0; i < dirs.Length; ++i)
+            if (ActiveClient == null)
+                return;
+
+            if (!Directory.Exists(ClientDirectoryName))
+                Directory.CreateDirectory(ClientDirectoryName);
+
+            var directories = Directory.GetDirectories(ClientDirectoryName);
+            foreach (var directory in directories)
             {
-                DirectoryInfo info = new DirectoryInfo(dirs[i]);
-                DateTime dateTime = info.LastWriteTime;
+                var directoryInfo = new DirectoryInfo(directory);
+                var sendData = Encoding.ASCII.GetBytes("SENDFICHIER" + ";" + directoryInfo.LastWriteTime);
+                UDPClient.Send(sendData, sendData.Length);
 
-                Byte[] senddata = Encoding.ASCII.GetBytes("SENDFICHIER" + ";" + dateTime);
-                UDPClient.Send(senddata, senddata.Length);
+                var receiveBytes = UDPClient.Receive(ref IP_ENDPOINT);
+                if (Encoding.ASCII.GetString(receiveBytes) != "YES")
+                    continue;
 
-                Byte[] receiveBytes = UDPClient.Receive(ref IP_ENDPOINT);
-                string returnData = Encoding.ASCII.GetString(receiveBytes);
-                if (returnData == "YES")
+                var resultString = Regex.Match(directory, @"\d+").Value;
+                var groupId = int.Parse(resultString);
+                foreach (var file in Directory.GetFiles(directory))
                 {
-                    string resultString = Regex.Match(dirs[i], @"\d+").Value;
-                    int groupID = int.Parse(resultString);
-                    string[] files = Directory.GetFiles(dirs[i]);
-                    for(int j = 0; j < files.Length; ++j)
-                    {
-                        byte[] bytes = File.ReadAllBytes(files[j]);
-                        string[] parse = files[j].Split('\\');
-                        await FichierAPI.Upload(bytes, parse[2], groupID);
-                    }
+                    var parse = file.Split('\\');
+                    await FichierAPI.Upload(File.ReadAllBytes(file), parse[2], groupId);
                 }
-                
             }
-           
+
 
             /*Byte[] senddata = Encoding.ASCII.GetBytes("SENDFICHIER" + ";" + LAST_TIME_SYNC_FILES);
             UDPClient.Send(senddata, senddata.Length);
@@ -171,5 +170,6 @@ namespace client
                 Thread.Sleep(SYNCHRONIZATION_PERIOD);
             }
         }
+
     }
 }
