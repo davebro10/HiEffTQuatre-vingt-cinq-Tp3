@@ -30,32 +30,32 @@ namespace client.API
 
         public async Task Upload(byte[] fileBytes, string nom, int groupeID)
         {
+            Fichier f = new Fichier();
+            f.nom = nom;
+            f.id_groupe_fk = groupeID;
+
+            string jsonFichier = JsonConvert.SerializeObject(f);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonFichier);
+
+            MultipartFormDataContent form = new MultipartFormDataContent
+                {
+                    { new ByteArrayContent(buffer), "file" },
+                    { new ByteArrayContent(fileBytes), "fileRaw", f.nom }
+                };
+            HttpResponseMessage response = null;
+
             try
             {
-                Fichier f = new Fichier();
-                f.nom = nom;
-                f.id_groupe_fk = groupeID;
-
-                string jsonFichier = JsonConvert.SerializeObject(f);
-                var buffer = System.Text.Encoding.UTF8.GetBytes(jsonFichier);
-
-                MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new ByteArrayContent(buffer), "file");
-                form.Add(new ByteArrayContent(fileBytes), "fileRaw", f.nom);
-
                 using (HttpClient client = new HttpClient())
-                using (HttpResponseMessage response = await client.PostAsync(BaseAddress + "api/fichier/upload/", form))
                 {
-                    if (response.IsSuccessStatusCode)
-                    {
-
-                    }
+                    response = await client.PostAsync(BaseAddress + "api/fichier/upload/", form);
                 }
             }
             catch (Exception ex)
             {
                 Console.Error.WriteLine(ex.Message);
             }
+            response?.Dispose();
         }
 
         public async Task CreateFileAsync(Fichier f)
