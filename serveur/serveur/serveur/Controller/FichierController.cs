@@ -119,7 +119,7 @@ namespace serveur
         {
             Fichier f = GetFile(id_fichier);
             byte[] readBuffer = { };
-
+            HttpResponseMessage result;
             try
             {
                 string pathString = Path.GetDirectoryName(Application.ExecutablePath);
@@ -127,18 +127,18 @@ namespace serveur
                 pathString = Path.Combine(pathString, f.id_groupe_fk.ToString());
                 pathString = Path.Combine(pathString, f.nom);
                 readBuffer = System.IO.File.ReadAllBytes(pathString);
+
+                result = Request.CreateResponse(HttpStatusCode.OK);
+                result.Content = new ByteArrayContent(readBuffer);
+                result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+                result.Content.Headers.ContentDisposition.FileName = f.nom;
             } 
             catch(Exception ex)
             {
                 Console.Error.WriteLine(ex.Message);
+                result = Request.CreateResponse(HttpStatusCode.NotFound);
             }
-
-            HttpResponseMessage result = Request.CreateResponse(HttpStatusCode.OK);
-            result.Content = new ByteArrayContent(readBuffer);
-            result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-            result.Content.Headers.ContentDisposition.FileName = f.nom;
-            return result;
-            
+            return result; 
         }
 
 
