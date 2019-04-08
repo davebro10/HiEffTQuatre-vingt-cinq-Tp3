@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text;
+
 
 namespace client
 {
@@ -13,13 +15,28 @@ namespace client
             : base(parent)
         {
             InitializeComponent();
+            UpdateValues();
         }
 
-        public override void Synchronize()
+        public void UpdateValues()
         {
             NomClientLabel.Text = ActiveClient?.nom ?? "Anonyme";
-            SyncUserGroups();
-            SyncConnectedUsers();
+            MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
+        }
+
+        public void Synchronize()
+        {
+            Byte[] senddata = Encoding.ASCII.GetBytes("MEMBRE" + ";" + MainForm.LAST_TIME_SYNC_CLIENTS);
+            MainForm.UDPClient.Send(senddata, senddata.Length);
+
+            Byte[] receiveBytes = MainForm.UDPClient.Receive(ref MainForm.IP_ENDPOINT);
+            string returnData = Encoding.ASCII.GetString(receiveBytes);
+            if(returnData == "YES")
+            {
+                SyncConnectedUsers();
+                MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
+                SyncUserGroups();
+            }
         }
 
         private void SyncUserGroups()
