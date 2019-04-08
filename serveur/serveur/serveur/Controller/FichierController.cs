@@ -118,19 +118,28 @@ namespace serveur
         public HttpResponseMessage Download([FromUri]int id_fichier)
         {
             Fichier f = GetFile(id_fichier);
-            string pathString = Path.GetDirectoryName(Application.ExecutablePath);
-            pathString = Path.Combine(pathString, "groupfiles");
-            pathString = Path.Combine(pathString, f.id_groupe_fk.ToString());
-            pathString = Path.Combine(pathString, f.nom);
+            byte[] readBuffer = { };
 
-            byte[] readBuffer = System.IO.File.ReadAllBytes(pathString);
+            try
+            {
+                string pathString = Path.GetDirectoryName(Application.ExecutablePath);
+                pathString = Path.Combine(pathString, "groupfiles");
+                pathString = Path.Combine(pathString, f.id_groupe_fk.ToString());
+                pathString = Path.Combine(pathString, f.nom);
+                readBuffer = System.IO.File.ReadAllBytes(pathString);
+            } 
+            catch(Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
 
-            HttpResponseMessage result = null;
-            result = Request.CreateResponse(HttpStatusCode.OK);
-            result.Content = new ByteArrayContent(readBuffer);
-            result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-            result.Content.Headers.ContentDisposition.FileName = f.nom;
-            return result;
+            using (HttpResponseMessage result = Request.CreateResponse(HttpStatusCode.OK))
+            {
+                result.Content = new ByteArrayContent(readBuffer);
+                result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+                result.Content.Headers.ContentDisposition.FileName = f.nom;
+                return result;
+            }
         }
 
 
