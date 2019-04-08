@@ -48,7 +48,9 @@ namespace client
             foreach (var group in allGroups)
             {
                 var members = Task.Run(() => InvitationAPI.GetGroupMembers(group.id_groupe)).Result;
-                if (ActiveClient == null || !members.Contains(ActiveClient) && @group.admin != ActiveClient.id_client)
+                if (ActiveClient == null || 
+                    members.Find(client => client.id_client == ActiveClient.id_client) == null
+                    && @group.admin != ActiveClient.id_client)
                     continue;
 
                 activeClientGroups.Add(group);

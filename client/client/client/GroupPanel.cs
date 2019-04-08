@@ -57,7 +57,9 @@ namespace client
             {
                 MemberListBox.Items.Clear();
                 foreach (var member in members)
-                    MemberListBox.Items.Add(member.usager);
+                {
+                    MemberListBox.Items.Add(member.usager != null ? member.usager : "Anonyme");
+                }
             });
         }
 

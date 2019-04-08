@@ -430,6 +430,7 @@ namespace serveur.Models
                 {
                     LAST_TIME_SYNC_NOTIFS = DateTime.Now;
                     DeleteInvitation(inv);
+                    LAST_TIME_SYNC_NOTIFS = DateTime.Now;
                     return true;
                 }
                 else
@@ -439,6 +440,7 @@ namespace serveur.Models
             }
             else
             {
+                LAST_TIME_SYNC_NOTIFS = DateTime.Now;
                 return DeleteInvitation(inv);
             }
             
