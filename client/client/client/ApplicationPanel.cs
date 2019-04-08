@@ -12,6 +12,7 @@ namespace client
 #endif
     {
         private readonly MainForm _parent;
+        
 
         protected ApplicationPanel(MainForm parent)
         {

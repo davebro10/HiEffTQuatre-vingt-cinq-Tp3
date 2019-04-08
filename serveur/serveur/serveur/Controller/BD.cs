@@ -10,6 +10,7 @@ namespace serveur.Models
 {
     public class BD
     {
+
         private MySqlConnection _conn { get; set; }
 
         public MySqlConnection Connection

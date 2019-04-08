@@ -10,10 +10,19 @@ namespace serveur.Models
     public class API
     {
         private BD bdd;
-        
+
+        public static DateTime LAST_TIME_SYNC_CLIENTS { get; set; }
+        public static DateTime LAST_TIME_SYNC_FILES { get; set; }
+        public static DateTime LAST_TIME_SYNC_GROUPS { get; set; }
+        public static DateTime LAST_TIME_SYNC_NOTIFS { get; set; }
+
         public API()
         {
             bdd = new BD();
+            LAST_TIME_SYNC_CLIENTS = DateTime.Now;
+            LAST_TIME_SYNC_FILES = DateTime.Now;
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
+            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
         }
 
         private bool ExecuteNonQuery(MySqlCommand cmd)
@@ -88,7 +97,7 @@ namespace serveur.Models
             {
                 Console.Error.WriteLine(ex.Message);
             }
-
+            LAST_TIME_SYNC_CLIENTS = DateTime.Now;
             bdd.CloseConnection();
             return lst;
         }
@@ -101,6 +110,7 @@ namespace serveur.Models
             cmd.Parameters.AddWithValue("@usager", c.usager);
             cmd.Parameters.AddWithValue("@motdepasse", c.motdepasse);
             cmd.Parameters.AddWithValue("@action", c.action);
+            LAST_TIME_SYNC_CLIENTS = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
@@ -113,7 +123,7 @@ namespace serveur.Models
             cmd.Parameters.AddWithValue("@usager", c.usager);
             cmd.Parameters.AddWithValue("@motdepasse", c.motdepasse);
             cmd.Parameters.AddWithValue("@action", c.action);
-
+            LAST_TIME_SYNC_CLIENTS = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
@@ -137,6 +147,7 @@ namespace serveur.Models
             
             cmd = new MySqlCommand("DELETE FROM client WHERE id_client=@id_client");
             cmd.Parameters.AddWithValue("@id_client", c.id_client);
+            LAST_TIME_SYNC_CLIENTS = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
@@ -155,6 +166,7 @@ namespace serveur.Models
                 reader.Read();
                 Client client = ReaderToClient(reader);
                 bdd.CloseConnection();
+                LAST_TIME_SYNC_CLIENTS = DateTime.Now;
                 return client;
             }
         }
@@ -179,6 +191,7 @@ namespace serveur.Models
                 reader.Read();
                 Client client = ReaderToClient(reader);
                 bdd.CloseConnection();
+                LAST_TIME_SYNC_CLIENTS = DateTime.Now;
                 return client;
             }
         }
@@ -193,7 +206,7 @@ namespace serveur.Models
                 nom = reader["nom"] != DBNull.Value ? reader.GetString("nom") : null,
                 admin = reader["admin"] != DBNull.Value ? reader.GetInt32("admin") : 0
             };
-
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
             return groupe;
         }
 
@@ -205,7 +218,7 @@ namespace serveur.Models
                 id_groupe_fk = reader["id_groupe_fk"] != DBNull.Value ? reader.GetInt32("id_groupe_fk") : 0,
                 id_client_fk = reader["id_client_fk"] != DBNull.Value ? reader.GetInt32("id_client_fk") : 0
             };
-
+            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
             return inv;
         }
 
@@ -230,6 +243,7 @@ namespace serveur.Models
                 Console.Error.WriteLine(ex.Message);
             }
             bdd.CloseConnection();
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
             return lst;
         }
 
@@ -244,6 +258,7 @@ namespace serveur.Models
             {
                 AddMemberToGroup((int)cmd.LastInsertedId, g.admin);
             }
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
             return success;
         }
 
@@ -254,13 +269,14 @@ namespace serveur.Models
             cmd.Parameters.AddWithValue("@id_groupe", g.id_groupe);
             cmd.Parameters.AddWithValue("@admin", g.admin);
             cmd.Parameters.AddWithValue("@nom", g.nom);
-
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
         public bool SetGroupAdministrator(Groupe group, Client admin)
         {
             group.admin = admin.id_client;
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
             return ModifyGroup(group);
         }
 
@@ -294,6 +310,7 @@ namespace serveur.Models
             query = "DELETE FROM groupe WHERE id_groupe=@id_groupe";
             cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_groupe", g.id_groupe);
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
@@ -313,6 +330,7 @@ namespace serveur.Models
                 reader.Read();
                 Groupe groupe = ReaderToGroup(reader);
                 bdd.CloseConnection();
+                LAST_TIME_SYNC_GROUPS = DateTime.Now;
                 return groupe;
             }
         }
@@ -337,6 +355,7 @@ namespace serveur.Models
                 Console.Error.WriteLine(ex.Message);
             }
             bdd.CloseConnection();
+            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
             return lst;
         }
 
@@ -356,6 +375,7 @@ namespace serveur.Models
                 reader.Read();
                 Invitation inv = ReaderToInvitation(reader);
                 bdd.CloseConnection();
+                LAST_TIME_SYNC_NOTIFS = DateTime.Now;
                 return inv;
             }
         }
@@ -382,6 +402,7 @@ namespace serveur.Models
             }
 
             bdd.CloseConnection();
+            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
             return lst;
         }
 
@@ -391,7 +412,7 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_groupe", id_groupe);
             cmd.Parameters.AddWithValue("@id_client", id_client);
-
+            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
@@ -400,7 +421,7 @@ namespace serveur.Models
             string query = "DELETE FROM invitation WHERE id_invitation=@id_invitation";
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_invitation", inv.id_invitation);
-
+            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
         
@@ -423,6 +444,7 @@ namespace serveur.Models
             {
                 return DeleteInvitation(inv);
             }
+            LAST_TIME_SYNC_NOTIFS = DateTime.Now;
         }
         public bool AddMemberToGroup(int id_groupe, int id_client)
         {
@@ -430,7 +452,7 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_client_fk", id_client);
             cmd.Parameters.AddWithValue("@id_groupe_fk", id_groupe);
-
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
@@ -465,7 +487,7 @@ namespace serveur.Models
             {
                 Console.Error.WriteLine(ex.Message);
             }
-
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
             bdd.CloseConnection();
             return lst;
         }
@@ -476,7 +498,7 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_client_fk", id_client);
             cmd.Parameters.AddWithValue("@id_groupe_fk", id_groupe);
-
+            LAST_TIME_SYNC_GROUPS = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
@@ -490,7 +512,7 @@ namespace serveur.Models
                 id_groupe_fk = reader["id_groupe_fk"] != DBNull.Value ? reader.GetInt32("id_groupe_fk") : 0,
                 nom = reader["nom"] != DBNull.Value ? reader.GetString("nom") : null
             };
-
+            LAST_TIME_SYNC_FILES = DateTime.Now;
             return file;
         }
 
@@ -510,6 +532,7 @@ namespace serveur.Models
                 reader.Read();
                 Fichier fichier = ReaderToFile(reader);
                 bdd.CloseConnection();
+                LAST_TIME_SYNC_FILES = DateTime.Now;
                 return fichier;
             }
         }
@@ -540,7 +563,7 @@ namespace serveur.Models
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_groupe_fk", file.id_groupe_fk);
             cmd.Parameters.AddWithValue("@nom", file.nom);
-
+            LAST_TIME_SYNC_FILES = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
@@ -551,7 +574,7 @@ namespace serveur.Models
             cmd.Parameters.AddWithValue("@id_fichier", file.id_fichier);
             cmd.Parameters.AddWithValue("@id_groupe_fk", file.id_groupe_fk);
             cmd.Parameters.AddWithValue("@nom", file.nom);
-
+            LAST_TIME_SYNC_FILES = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 
@@ -560,7 +583,7 @@ namespace serveur.Models
             string query = "DELETE FROM fichier WHERE id_fichier=@id_fichier";
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_fichier", file.id_fichier);
-
+            LAST_TIME_SYNC_FILES = DateTime.Now;
             return ExecuteNonQuery(cmd);
         }
 

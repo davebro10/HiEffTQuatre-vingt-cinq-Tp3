@@ -22,6 +22,7 @@ namespace serveur
         /// <exception cref="HttpResponseException"/>
         /// 
         /// <returns></returns>
+        /// /api/fichier/upload
         [HttpPost]
         public async Task<IHttpActionResult> Upload()
         {

@@ -15,6 +15,8 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.IO;
 
+using System.Threading;
+
 namespace serveur
 {
     public partial class frmMain : Form
@@ -23,6 +25,10 @@ namespace serveur
 
         public frmMain()
         {
+
+            UDP udpClient = new UDP();
+            udpClient.Start();
+
             InitializeComponent();
             _api = new API();
 
@@ -44,6 +50,7 @@ namespace serveur
 
             refreshGrid();
         }
+
 
         private void refreshGrid()
         {

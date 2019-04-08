@@ -28,6 +28,36 @@ namespace client.API
             return null;
         }
 
+        public async Task Upload(byte[] fileBytes, string nom, int groupeID)
+        {
+            Fichier f = new Fichier();
+            f.nom = nom;
+            f.id_groupe_fk = groupeID;
+
+            string jsonFichier = JsonConvert.SerializeObject(f);
+            var buffer = System.Text.Encoding.UTF8.GetBytes(jsonFichier);
+
+            MultipartFormDataContent form = new MultipartFormDataContent
+                {
+                    { new ByteArrayContent(buffer), "file" },
+                    { new ByteArrayContent(fileBytes), "fileRaw", f.nom }
+                };
+            HttpResponseMessage response = null;
+
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    response = await client.PostAsync(BaseAddress + "api/fichier/upload/", form);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+            }
+            response?.Dispose();
+        }
+
         public async Task CreateFileAsync(Fichier f)
         {
             var jsonObj = JsonConvert.SerializeObject(f);

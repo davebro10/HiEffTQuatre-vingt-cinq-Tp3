@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Text;
+
 
 namespace client
 {
@@ -13,13 +15,28 @@ namespace client
             : base(parent)
         {
             InitializeComponent();
+            UpdateValues();
         }
 
-        public override void Synchronize()
+        public void UpdateValues()
         {
             NomClientLabel.Text = ActiveClient?.nom ?? "Anonyme";
-            SyncUserGroups();
-            SyncConnectedUsers();
+            MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
+        }
+
+        public void Synchronize()
+        {
+            Byte[] senddata = Encoding.ASCII.GetBytes("MEMBRE" + ";" + MainForm.LAST_TIME_SYNC_CLIENTS);
+            MainForm.UDPClient.Send(senddata, senddata.Length);
+
+            Byte[] receiveBytes = MainForm.UDPClient.Receive(ref MainForm.IP_ENDPOINT);
+            string returnData = Encoding.ASCII.GetString(receiveBytes);
+            if(returnData == "YES")
+            {
+                SyncConnectedUsers();
+                MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
+                SyncUserGroups();
+            }
         }
 
         private void SyncUserGroups()
@@ -70,32 +87,27 @@ namespace client
             });
         }
 
-        private void VoirGroupeButton_Click(object sender, System.EventArgs e) => Task.Run(() => VoirGroupe(sender, e));
-
-        private async Task VoirGroupe(object sender, System.EventArgs e)
+        private void VoirGroupeButton_Click(object sender, System.EventArgs e)
         {
             if (GroupesListView.SelectedItems.Count == 1)
             {
-                int selectedGroup = Int32.Parse(GroupesListView.SelectedItems[0].Text);
-                ActiveGroup = await GroupeAPI.GetGroupById(selectedGroup);
+                var selectedGroup = int.Parse(GroupesListView.SelectedItems[0].Text);
+                ActiveGroup = Task.Run(() => GroupeAPI.GetGroupById(selectedGroup)).Result;
                 ChangeActivePanel(MainForm.Panel.Groupe);
             }
             else
             {
                 DialogResult res = MessageBox.Show("Veuillez sélectionner un groupe.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
 
-        private void CreerButton_ClickAsync(object sender, System.EventArgs e) => Task.Run(() => CreerGroupe(sender, e));
-
-        private async Task CreerGroupe(object sender, System.EventArgs e)
+        private void CreerButton_ClickAsync(object sender, System.EventArgs e)
         {
             string groupName = Prompt.ShowDialog("Nom du groupe:", "");
             if (groupName != "")
             {
                 int activeClientId = ActiveClient.id_client;
-                await GroupeAPI.CreateGroup(groupName, activeClientId);
+                Task.Run(() => GroupeAPI.CreateGroup(groupName, activeClientId)).RunSynchronously(); 
                 // TODO : open group panel with group id??
             }
             else
