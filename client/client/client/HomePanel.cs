@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text;
 
-
 namespace client
 {
     public partial class HomePanel : ApplicationPanel
@@ -15,28 +14,28 @@ namespace client
             : base(parent)
         {
             InitializeComponent();
-            UpdateValues();
+            NomClientLabel.Text = ActiveClient?.nom ?? "Anonyme";
+            //UpdateValues();
         }
 
         public void UpdateValues()
         {
-            NomClientLabel.Text = ActiveClient?.nom ?? "Anonyme";
             MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
         }
 
-        public void Synchronize()
+        public override void Synchronize()
         {
-            Byte[] senddata = Encoding.ASCII.GetBytes("MEMBRE" + ";" + MainForm.LAST_TIME_SYNC_CLIENTS);
+            var senddata = Encoding.ASCII.GetBytes("MEMBRE" + ";" + MainForm.LAST_TIME_SYNC_CLIENTS);
             MainForm.UDPClient.Send(senddata, senddata.Length);
 
-            Byte[] receiveBytes = MainForm.UDPClient.Receive(ref MainForm.IP_ENDPOINT);
-            string returnData = Encoding.ASCII.GetString(receiveBytes);
-            if(returnData == "YES")
-            {
-                SyncConnectedUsers();
-                MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
-                SyncUserGroups();
-            }
+            var receiveBytes = MainForm.UDPClient.Receive(ref MainForm.IP_ENDPOINT);
+            var returnData = Encoding.ASCII.GetString(receiveBytes);
+            if (returnData != "YES")
+                return;
+
+            SyncConnectedUsers();
+            MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
+            SyncUserGroups();
         }
 
         private void SyncUserGroups()
@@ -109,7 +108,7 @@ namespace client
             if (groupName != "")
             {
                 int activeClientId = ActiveClient.id_client;
-                Task.Run(() => GroupeAPI.CreateGroup(groupName, activeClientId)).RunSynchronously(); 
+                Task.Run(() => GroupeAPI.CreateGroup(groupName, activeClientId)).RunSynchronously();
                 // TODO : open group panel with group id??
             }
             else
