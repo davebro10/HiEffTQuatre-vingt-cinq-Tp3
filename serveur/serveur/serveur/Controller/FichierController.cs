@@ -133,13 +133,12 @@ namespace serveur
                 Console.Error.WriteLine(ex.Message);
             }
 
-            using (HttpResponseMessage result = Request.CreateResponse(HttpStatusCode.OK))
-            {
-                result.Content = new ByteArrayContent(readBuffer);
-                result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
-                result.Content.Headers.ContentDisposition.FileName = f.nom;
-                return result;
-            }
+            HttpResponseMessage result = Request.CreateResponse(HttpStatusCode.OK);
+            result.Content = new ByteArrayContent(readBuffer);
+            result.Content.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment");
+            result.Content.Headers.ContentDisposition.FileName = f.nom;
+            return result;
+            
         }
 
 
