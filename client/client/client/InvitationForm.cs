@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using serveur.Models;
+using System.Collections.Generic;
 using System.Windows.Forms;
-using serveur.Models;
 
 namespace client
 {
     public partial class InvitationForm : Form
     {
-        private List<Client> _clientList;
-
         public InvitationForm(List<Client> clientList = null)
         {
             InitializeComponent();
+
+            ClientListView.DisplayMember = nameof(Client.usager);
 
             if (clientList != null)
                 ClientList = clientList;
@@ -37,10 +36,9 @@ namespace client
         {
             set
             {
-                _clientList = value;
                 ClientListView.Items.Clear();
-                foreach (var client in _clientList)
-                    ClientListView.Items.Add(client.usager ?? client.nom ?? "UnClientDeTest");
+                foreach (var client in value)
+                    ClientListView.Items.Add(client);
             }
         }
 
@@ -52,7 +50,14 @@ namespace client
                 if (DialogResult == DialogResult.Cancel)
                     return selectedClients;
 
-                selectedClients.AddRange(_clientList.Where(c => ClientListView.SelectedItems.Contains(c.usager)));
+                foreach (var item in ClientListView.SelectedItems)
+                {
+                    if (!(item is Client client))
+                        continue;
+
+                    selectedClients.Add(client);
+                }
+
                 return selectedClients;
             }
         }

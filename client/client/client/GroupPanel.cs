@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using serveur.Models;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,10 +16,15 @@ namespace client
             FileListView.Columns.Add("ID");
             FileListView.Columns.Add("Nom");
             FileListView.Columns.Add("Groupe ID");
+
+            MemberListBox.DisplayMember = nameof(Client.usager);
         }
 
         public override void Synchronize()
         {
+            PromoteAdmin.Enabled = ActiveGroup?.admin == ActiveClient?.id_client;
+            RemoveMember.Enabled = ActiveGroup?.admin == ActiveClient?.id_client;
+
             SyncGroup();
             SyncFiles();
             SyncMembers();
@@ -57,26 +63,11 @@ namespace client
             {
                 MemberListBox.Items.Clear();
                 foreach (var member in members)
-                {
-                    MemberListBox.Items.Add(member.usager != null ? member.usager : "Anonyme");
-                }
+                    MemberListBox.Items.Add(member);
             });
         }
 
-        private void AddButton_Click(object sender, System.EventArgs e)
-        {
-
-        }
-
-        private void ModifyButton_Click(object sender, System.EventArgs e)
-        {
-
-        }
-
-        private void DeleteButton_Click(object sender, System.EventArgs e)
-        {
-
-        }
+        private void Return_Click(object sender, System.EventArgs e) => ChangeActivePanel(MainForm.Panel.Home);
 
         private void InviteButton_Click(object sender, System.EventArgs e)
         {
@@ -89,6 +80,37 @@ namespace client
 
             foreach (var client in invitationForm.SelectedClients)
                 Task.Run(() => InvitationAPI.InviteMemberToGroupAsync(client.id_client, ActiveGroup.id_groupe));
+        }
+
+        private void PromoteAdmin_Click(object sender, System.EventArgs e)
+        {
+            if (ActiveGroup.admin != ActiveClient.id_client)
+                return;
+
+            if (!(MemberListBox.SelectedItem is Client selectedClient))
+                return;
+
+            Task.Run(() => GroupeAPI.ModifyGroupAsync(ActiveGroup));
+        }
+
+        private void RemoveMember_Click(object sender, System.EventArgs e)
+        {
+            if (ActiveGroup.admin != ActiveClient.id_client)
+                return;
+
+            if (!(MemberListBox.SelectedItem is Client selectedClient))
+                return;
+
+            Task.Run(() => InvitationAPI.RemoveMemberToGroupAsync(selectedClient.id_client, ActiveGroup.id_groupe));
+        }
+
+        private void Supprimer_Click(object sender, System.EventArgs e)
+        {
+            if (ActiveGroup.admin != ActiveClient.id_client)
+                return;
+
+            Task.Run(() => GroupeAPI.DeleteGroupAsync(ActiveGroup));
+            ChangeActivePanel(MainForm.Panel.Home);
         }
     }
 }
