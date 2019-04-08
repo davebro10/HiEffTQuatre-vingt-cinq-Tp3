@@ -70,32 +70,27 @@ namespace client
             });
         }
 
-        private void VoirGroupeButton_Click(object sender, System.EventArgs e) => Task.Run(() => VoirGroupe(sender, e));
-
-        private async Task VoirGroupe(object sender, System.EventArgs e)
+        private void VoirGroupeButton_Click(object sender, System.EventArgs e)
         {
             if (GroupesListView.SelectedItems.Count == 1)
             {
-                int selectedGroup = Int32.Parse(GroupesListView.SelectedItems[0].Text);
-                ActiveGroup = await GroupeAPI.GetGroupById(selectedGroup);
+                var selectedGroup = int.Parse(GroupesListView.SelectedItems[0].Text);
+                ActiveGroup = Task.Run(() => GroupeAPI.GetGroupById(selectedGroup)).Result;
                 ChangeActivePanel(MainForm.Panel.Groupe);
             }
             else
             {
                 DialogResult res = MessageBox.Show("Veuillez sélectionner un groupe.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-
         }
 
-        private void CreerButton_ClickAsync(object sender, System.EventArgs e) => Task.Run(() => CreerGroupe(sender, e));
-
-        private async Task CreerGroupe(object sender, System.EventArgs e)
+        private void CreerButton_ClickAsync(object sender, System.EventArgs e)
         {
             string groupName = Prompt.ShowDialog("Nom du groupe:", "");
             if (groupName != "")
             {
                 int activeClientId = ActiveClient.id_client;
-                await GroupeAPI.CreateGroup(groupName, activeClientId);
+                Task.Run(() => GroupeAPI.CreateGroup(groupName, activeClientId)).RunSynchronously(); 
                 // TODO : open group panel with group id??
             }
             else
