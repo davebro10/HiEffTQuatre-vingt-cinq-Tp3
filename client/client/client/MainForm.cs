@@ -1,6 +1,7 @@
 ﻿using client.API;
 using serveur.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
@@ -9,9 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace client
 {
@@ -25,7 +23,7 @@ namespace client
         private readonly ConnectionPanel _connectionPanel;
         private readonly NotificationsPanel _notificationsPanel;
 
-        private string ClientDirectoryName => $"..\\..\\..\\..\\{ActiveClient.usager}";
+        private string ClientDirectoryName => ActiveClient.usager; // $"..\\..\\..\\..\\{ActiveClient.usager}";
         public Client ActiveClient { get; set; }
         public Groupe ActiveGroup { get; set; }
         protected FichierAPI FichierAPI { get; }
@@ -133,22 +131,21 @@ namespace client
             }
 
             //Create main repository
-            if (!Directory.Exists(ActiveClient.usager))
+            if (!Directory.Exists(ClientDirectoryName))
             {
-                Directory.CreateDirectory(ActiveClient.usager);
+                Directory.CreateDirectory(ClientDirectoryName);
             }
 
             // Create group's repositories
-            List<Groupe> groups = getUserGroups();
-            for(int i = 0; i < groups.Count; ++i)
+            foreach (var group in GetUserGroups())
             {
-                if (!Directory.Exists(ActiveClient.usager + "/" + groups[i].id_groupe.ToString()))
+                if (!Directory.Exists(ClientDirectoryName + "/" + group.id_groupe.ToString()))
                 {
-                    Directory.CreateDirectory(ActiveClient.usager + "/" + groups[i].id_groupe.ToString());
+                    Directory.CreateDirectory(ClientDirectoryName + "/" + group.id_groupe.ToString());
                 }
             }
 
-            var directories = Directory.GetDirectories(ActiveClient.usager);
+            var directories = Directory.GetDirectories(ClientDirectoryName);
             foreach (var directory in directories)
             {
                 var resultString = Regex.Match(directory, @"\d+").Value;
@@ -203,14 +200,14 @@ namespace client
                             await FichierAPI.Upload(File.ReadAllBytes(file), parse[2], groupId, f.id_fichier);
                         }
                     }
-                    if(!find)
+                    if (!find)
                     {
                         await FichierAPI.Upload(File.ReadAllBytes(file), parse[2], groupId, 999999);
                     }
                 } 
             }
 
-            directories = Directory.GetDirectories(ActiveClient.usager);
+            directories = Directory.GetDirectories(ClientDirectoryName);
             foreach (var directory in directories)
             {
                 var resultString = Regex.Match(directory, @"\d+").Value;
@@ -270,8 +267,7 @@ namespace client
 
         }
 
-
-        private List<Groupe> getUserGroups()
+        private List<Groupe> GetUserGroups()
         {
             var allGroups = Task.Run(() => GroupeAPI.GetAllGroups()).Result;
             if (allGroups == null)
@@ -293,8 +289,6 @@ namespace client
 
             return activeClientGroups;
         }
-
-
 
         public Task PeriodicSynchronization()
         {
