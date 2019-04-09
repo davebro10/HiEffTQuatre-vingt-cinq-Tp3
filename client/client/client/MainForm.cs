@@ -229,12 +229,16 @@ namespace client
                     {
 
                         byte[] stream = await FichierAPI.Download(files[j].id_fichier);
-                        try
+                        if (stream != null)
                         {
-                            File.WriteAllBytes(directory + "/" + files[j].nom, stream);
-                        } catch(Exception e)
-                        {
-                            Console.Error.WriteLine(e.Message);
+                            try
+                            {
+                                File.WriteAllBytes(directory + "/" + files[j].nom, stream);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.Error.WriteLine(e.Message);
+                            }
                         }
                     }
 
