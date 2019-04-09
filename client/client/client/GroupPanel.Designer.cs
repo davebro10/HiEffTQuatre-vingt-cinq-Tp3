@@ -35,11 +35,13 @@
             this.PromoteAdmin = new System.Windows.Forms.ToolStripMenuItem();
             this.RemoveMember = new System.Windows.Forms.ToolStripMenuItem();
             this.FileListView = new System.Windows.Forms.ListView();
+            this.columnHeaderID = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.InviteButton = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.GroupNameLabel = new System.Windows.Forms.Label();
             this.Return = new System.Windows.Forms.Button();
             this.Supprimer = new System.Windows.Forms.Button();
+            this.columnHeaderNom = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.MembersContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -90,6 +92,9 @@
             this.FileListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.FileListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeaderID,
+            this.columnHeaderNom});
             this.FileListView.Location = new System.Drawing.Point(6, 37);
             this.FileListView.MultiSelect = false;
             this.FileListView.Name = "FileListView";
@@ -97,6 +102,11 @@
             this.FileListView.TabIndex = 3;
             this.FileListView.UseCompatibleStateImageBehavior = false;
             this.FileListView.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeaderID
+            // 
+            this.columnHeaderID.Text = "ID";
+            this.columnHeaderID.Width = 100;
             // 
             // InviteButton
             // 
@@ -149,6 +159,11 @@
             this.Supprimer.UseVisualStyleBackColor = true;
             this.Supprimer.Click += new System.EventHandler(this.Supprimer_Click);
             // 
+            // columnHeaderNom
+            // 
+            this.columnHeaderNom.Text = "Nom";
+            this.columnHeaderNom.Width = 100;
+            // 
             // GroupPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -182,5 +197,7 @@
         private System.Windows.Forms.ToolStripMenuItem RemoveMember;
         private System.Windows.Forms.Button Return;
         private System.Windows.Forms.Button Supprimer;
+        private System.Windows.Forms.ColumnHeader columnHeaderID;
+        private System.Windows.Forms.ColumnHeader columnHeaderNom;
     }
 }

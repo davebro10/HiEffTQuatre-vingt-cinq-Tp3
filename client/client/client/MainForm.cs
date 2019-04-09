@@ -236,7 +236,7 @@ namespace client
                             File.WriteAllBytes(directory + "/" + files[j].nom, stream);
                         } catch(Exception e)
                         {
-
+                            Console.Error.WriteLine(e.Message);
                         }
                     }
 

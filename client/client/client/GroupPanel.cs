@@ -26,8 +26,14 @@ namespace client
 
         private async Task SyncGroup()
         {
-            GroupNameLabel.Text = ActiveGroup.nom;
-            AdminNameLabel.Text = (await ClientAPI.GetClientById(ActiveGroup.admin)).usager;
+            string groupName = ActiveGroup.nom;
+            string adminName = (await ClientAPI.GetClientById(ActiveGroup.admin)).usager;
+
+            BeginInvoke(new MethodInvoker(delegate
+            {
+                GroupNameLabel.Text = groupName;
+                AdminNameLabel.Text = adminName;
+            }));
         }
 
         private async Task SyncFiles()
@@ -38,9 +44,7 @@ namespace client
 
             FileListView.Invoke((MethodInvoker) delegate
             {
-                FileListView.Clear();
-                FileListView.Columns.Add("ID");
-                FileListView.Columns.Add("Nom");
+                FileListView.Items.Clear();
                 foreach (var file in files)
                 {
                     string[] rows = { file.id_fichier.ToString(), file.nom };

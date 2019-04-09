@@ -64,15 +64,14 @@ namespace client.API
         {
             try
             {
-                HttpClient _client = new HttpClient();
-                HttpResponseMessage response = await _client.GetAsync(BaseAddress + "api/fichier/download?id_fichier=" + FileID);
-
-                if (response.IsSuccessStatusCode)
+                using (HttpClient _client = new HttpClient())
+                using (HttpResponseMessage response = await _client.GetAsync(BaseAddress + "api/fichier/download?id_fichier=" + FileID))
                 {
-                    return await response.Content.ReadAsByteArrayAsync();
+                    if (response.IsSuccessStatusCode)
+                    {
+                        return await response.Content.ReadAsByteArrayAsync();
+                    }
                 }
-
-
             }
             catch (Exception ex)
             {
