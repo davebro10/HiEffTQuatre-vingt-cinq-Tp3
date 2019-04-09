@@ -1,5 +1,6 @@
 ﻿using serveur.Models;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -18,6 +19,16 @@ namespace client
         {
             PromoteAdmin.Enabled = ActiveGroup?.admin == ActiveClient?.id_client;
             RemoveMember.Enabled = ActiveGroup?.admin == ActiveClient?.id_client;
+
+            //
+            var senddata = Encoding.ASCII.GetBytes("GROUPE" + ";" + MainForm.LAST_TIME_SYNC_CLIENTS);
+            MainForm.UDPClient.Send(senddata, senddata.Length);
+
+            var receiveBytes = MainForm.UDPClient.Receive(ref MainForm.IP_ENDPOINT);
+            var returnData = Encoding.ASCII.GetString(receiveBytes);
+            if (returnData != "YES")
+                return;
+            //
 
             Task.Run(SyncGroup);
             Task.Run(SyncFiles);
