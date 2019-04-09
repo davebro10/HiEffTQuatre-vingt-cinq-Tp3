@@ -19,6 +19,7 @@ namespace client
         {
             PromoteAdmin.Enabled = ActiveGroup?.admin == ActiveClient?.id_client;
             RemoveMember.Enabled = ActiveGroup?.admin == ActiveClient?.id_client;
+            GroupNameLabel.Text = ActiveGroup?.nom;
 
             //
             var senddata = Encoding.ASCII.GetBytes("GROUPE" + ";" + MainForm.LAST_TIME_SYNC_CLIENTS);
