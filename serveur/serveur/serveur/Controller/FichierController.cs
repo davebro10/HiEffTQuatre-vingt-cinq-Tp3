@@ -83,16 +83,21 @@ namespace serveur
                     if (fileToDelete != "")
                     {
                         fileToDelete = Path.Combine(pathString, fileToDelete);
-                        if (System.IO.File.Exists(fileToDelete))
+                    }
+                    else
+                    {
+                        fileToDelete = Path.Combine(pathString, f.nom);
+                    }
+
+                    if (System.IO.File.Exists(fileToDelete))
+                    {
+                        try
                         {
-                            try
-                            {
-                                System.IO.File.Delete(fileToDelete);
-                            }
-                            catch (System.IO.IOException e)
-                            {
-                                Console.Error.WriteLine(e.Message);
-                            }
+                            System.IO.File.Delete(fileToDelete);
+                        }
+                        catch (System.IO.IOException e)
+                        {
+                            Console.Error.WriteLine(e.Message);
                         }
                     }
 
