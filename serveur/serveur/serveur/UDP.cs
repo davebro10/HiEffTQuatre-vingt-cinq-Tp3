@@ -46,10 +46,16 @@ namespace serveur
                     DateTime dateTime = Convert.ToDateTime(response[1]);
                     Send(udpClient, RemoteIpEndPoint, dateTime, Models.API.LAST_TIME_SYNC_CLIENTS);
                 }
-                else if(response[0] == "SENDFICHIER")
+                else if(response[0] == "UPLOAD")
                 {
                     DateTime dateTime = Convert.ToDateTime(response[1]);
-                    Send(udpClient, RemoteIpEndPoint, Models.API.LAST_TIME_SYNC_CLIENTS, dateTime);
+                    Console.WriteLine("First : " + dateTime + " " + "SECOND: " + Models.API.LAST_TIME_SYNC_FILES + "\n");
+                    Send(udpClient, RemoteIpEndPoint, Models.API.LAST_TIME_SYNC_FILES, dateTime);
+                }
+                else if (response[0] == "DOWNLOAD")
+                {
+                    DateTime dateTime = Convert.ToDateTime(response[1]);
+                    Send(udpClient, RemoteIpEndPoint, dateTime, Models.API.LAST_TIME_SYNC_FILES);
                 }
             }
         }

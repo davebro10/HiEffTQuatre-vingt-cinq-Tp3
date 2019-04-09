@@ -26,6 +26,11 @@ namespace serveur
         public frmMain()
         {
 
+            API.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
+            API.LAST_TIME_SYNC_FILES = DateTime.Now;
+            API.LAST_TIME_SYNC_GROUPS = DateTime.Now;
+            API.LAST_TIME_SYNC_NOTIFS = DateTime.Now;
+
             UDP udpClient = new UDP();
             udpClient.Start();
 
