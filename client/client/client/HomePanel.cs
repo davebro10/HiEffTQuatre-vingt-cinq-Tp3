@@ -33,21 +33,21 @@ namespace client
             if (returnData != "YES")
                 return;
 
-            SyncConnectedUsers();
+            Task.Run(SyncConnectedUsers);
             MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;
-            SyncUserGroups();
+            Task.Run(SyncUserGroups);
         }
 
-        private void SyncUserGroups()
+        private async Task SyncUserGroups()
         {
-            var allGroups = Task.Run(() => GroupeAPI.GetAllGroups()).Result;
+            var allGroups = await GroupeAPI.GetAllGroups();
             if (allGroups == null)
                 return;
 
             var activeClientGroups = new List<Groupe>();
             foreach (var group in allGroups)
             {
-                var members = Task.Run(() => InvitationAPI.GetGroupMembers(group.id_groupe)).Result;
+                var members = await InvitationAPI.GetGroupMembers(group.id_groupe);
                 if (ActiveClient == null || 
                     members.Find(client => client.id_client == ActiveClient.id_client) == null
                     && @group.admin != ActiveClient.id_client)
@@ -67,9 +67,9 @@ namespace client
             });
         }
 
-        private void SyncConnectedUsers()
+        private async Task SyncConnectedUsers()
         {
-            var allClients = Task.Run(() => ClientAPI.GetAllClients()).Result;
+            var allClients = await ClientAPI.GetAllClients();
             if (allClients == null)
                 return;
 
@@ -88,12 +88,12 @@ namespace client
             });
         }
 
-        private void VoirGroupeButton_Click(object sender, System.EventArgs e)
+        private async void VoirGroupeButton_Click(object sender, System.EventArgs e)
         {
             if (GroupesListView.SelectedItems.Count == 1)
             {
                 var selectedGroup = int.Parse(GroupesListView.SelectedItems[0].Text);
-                ActiveGroup = Task.Run(() => GroupeAPI.GetGroupById(selectedGroup)).Result;
+                ActiveGroup = await GroupeAPI.GetGroupById(selectedGroup);
                 ChangeActivePanel(MainForm.Panel.Groupe);
             }
             else
@@ -102,13 +102,13 @@ namespace client
             }
         }
 
-        private void CreerButton_ClickAsync(object sender, System.EventArgs e)
+        private async void CreerButton_ClickAsync(object sender, System.EventArgs e)
         {
             string groupName = Prompt.ShowDialog("Nom du groupe:", "");
             if (groupName != "")
             {
                 int activeClientId = ActiveClient.id_client;
-                Task.Run(() => GroupeAPI.CreateGroup(groupName, activeClientId)).RunSynchronously();
+                await GroupeAPI.CreateGroup(groupName, activeClientId);
                 // TODO : open group panel with group id??
             }
             else

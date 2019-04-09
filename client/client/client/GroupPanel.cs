@@ -12,12 +12,6 @@ namespace client
         {
             InitializeComponent();
             Dock = DockStyle.Fill;
-
-            FileListView.Columns.Add("ID");
-            FileListView.Columns.Add("Nom");
-            FileListView.Columns.Add("Groupe ID");
-
-            MemberListBox.DisplayMember = nameof(Client.usager);
         }
 
         public override void Synchronize()
@@ -25,43 +19,46 @@ namespace client
             PromoteAdmin.Enabled = ActiveGroup?.admin == ActiveClient?.id_client;
             RemoveMember.Enabled = ActiveGroup?.admin == ActiveClient?.id_client;
 
-            SyncGroup();
-            SyncFiles();
-            SyncMembers();
+            Task.Run(SyncGroup);
+            Task.Run(SyncFiles);
+            Task.Run(SyncMembers);
         }
 
-        private void SyncGroup()
+        private async Task SyncGroup()
         {
             GroupNameLabel.Text = ActiveGroup.nom;
-            AdminNameLabel.Text = Task.Run(() => ClientAPI.GetClientById(ActiveGroup.admin)).Result.usager;
+            AdminNameLabel.Text = (await ClientAPI.GetClientById(ActiveGroup.admin)).usager;
         }
 
-        private void SyncFiles()
+        private async Task SyncFiles()
         {
-            var files = Task.Run(() => FichierAPI.GetFilesFromGroup(ActiveGroup.id_groupe)).Result;
+            var files = await FichierAPI.GetFilesFromGroup(ActiveGroup.id_groupe);
             if (files == null)
                 return;
 
             FileListView.Invoke((MethodInvoker) delegate
             {
                 FileListView.Clear();
+                FileListView.Columns.Add("ID");
+                FileListView.Columns.Add("Nom");
                 foreach (var file in files)
                 {
-                    string[] rows = { file.id_fichier.ToString(), file.nom, file.id_groupe_fk.ToString() };
+                    string[] rows = { file.id_fichier.ToString(), file.nom };
                     FileListView.Items.Add(new ListViewItem(rows));
                 }
             });
         }
 
-        private void SyncMembers()
+        private async Task SyncMembers()
         {
-            var members = Task.Run(() => InvitationAPI.GetGroupMembers(ActiveGroup.id_groupe)).Result;
+            var members = await InvitationAPI.GetGroupMembers(ActiveGroup.id_groupe);
             if (members == null)
                 return;
 
             MemberListBox.Invoke((MethodInvoker) delegate
             {
                 MemberListBox.Items.Clear();
+                MemberListBox.DisplayMember = nameof(Client.usager);
                 foreach (var member in members)
                     MemberListBox.Items.Add(member);
             });
@@ -69,20 +66,20 @@ namespace client
 
         private void Return_Click(object sender, System.EventArgs e) => ChangeActivePanel(MainForm.Panel.Home);
 
-        private void InviteButton_Click(object sender, System.EventArgs e)
+        private async void InviteButton_Click(object sender, System.EventArgs e)
         {
-            var allClients = Task.Run(() => ClientAPI.GetAllClients()).Result;
-            var groupClients = Task.Run(() => InvitationAPI.GetGroupMembers(ActiveGroup.id_groupe)).Result;
+            var allClients = await ClientAPI.GetAllClients();
+            var groupClients = await InvitationAPI.GetGroupMembers(ActiveGroup.id_groupe);
 
             var invitationForm = new InvitationForm(allClients.Where(c => !groupClients.Contains(c)).ToList());
             if (invitationForm.ShowDialog() != DialogResult.OK)
                 return;
 
             foreach (var client in invitationForm.SelectedClients)
-                Task.Run(() => InvitationAPI.InviteMemberToGroupAsync(client.id_client, ActiveGroup.id_groupe));
+                await InvitationAPI.InviteMemberToGroupAsync(client.id_client, ActiveGroup.id_groupe);
         }
 
-        private void PromoteAdmin_Click(object sender, System.EventArgs e)
+        private async void PromoteAdmin_Click(object sender, System.EventArgs e)
         {
             if (ActiveGroup.admin != ActiveClient.id_client)
                 return;
@@ -90,10 +87,12 @@ namespace client
             if (!(MemberListBox.SelectedItem is Client selectedClient))
                 return;
 
-            Task.Run(() => GroupeAPI.ModifyGroupAsync(ActiveGroup));
+            ActiveGroup.admin = selectedClient.id_client;
+            await GroupeAPI.ModifyGroupAsync(ActiveGroup);
+            Synchronize();
         }
 
-        private void RemoveMember_Click(object sender, System.EventArgs e)
+        private async void RemoveMember_Click(object sender, System.EventArgs e)
         {
             if (ActiveGroup.admin != ActiveClient.id_client)
                 return;
@@ -101,15 +100,16 @@ namespace client
             if (!(MemberListBox.SelectedItem is Client selectedClient))
                 return;
 
-            Task.Run(() => InvitationAPI.RemoveMemberToGroupAsync(selectedClient.id_client, ActiveGroup.id_groupe));
+            await InvitationAPI.RemoveMemberToGroupAsync(selectedClient.id_client, ActiveGroup.id_groupe);
+            Synchronize();
         }
 
-        private void Supprimer_Click(object sender, System.EventArgs e)
+        private async void Supprimer_Click(object sender, System.EventArgs e)
         {
             if (ActiveGroup.admin != ActiveClient.id_client)
                 return;
 
-            Task.Run(() => GroupeAPI.DeleteGroupAsync(ActiveGroup));
+            await GroupeAPI.DeleteGroupAsync(ActiveGroup);
             ChangeActivePanel(MainForm.Panel.Home);
         }
     }
