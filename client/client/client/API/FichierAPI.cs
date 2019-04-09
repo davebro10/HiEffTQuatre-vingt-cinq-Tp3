@@ -29,11 +29,12 @@ namespace client.API
             return null;
         }
 
-        public async Task Upload(byte[] fileBytes, string nom, int groupeID)
+        public async Task Upload(byte[] fileBytes, string nom, int groupeID, int id)
         {
             Fichier f = new Fichier();
             f.nom = nom;
             f.id_groupe_fk = groupeID;
+            f.id_fichier = id;
 
             string jsonFichier = JsonConvert.SerializeObject(f);
             var buffer = System.Text.Encoding.UTF8.GetBytes(jsonFichier);
@@ -132,7 +133,7 @@ namespace client.API
                 using (var request = new HttpRequestMessage())
                 {
                     request.Method = HttpMethod.Delete;
-                    request.RequestUri = new Uri(BaseAddress + "api/client/deletefile");
+                    request.RequestUri = new Uri(BaseAddress + "api/fichier/deletefile");
                     request.Content = new StringContent(JsonConvert.SerializeObject(f), System.Text.Encoding.UTF8, "application/json");
 
                     response = await client.SendAsync(request);

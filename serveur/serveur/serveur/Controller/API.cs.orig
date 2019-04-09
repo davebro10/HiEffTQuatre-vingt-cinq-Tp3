@@ -443,7 +443,10 @@ namespace serveur.Models
                 LAST_TIME_SYNC_NOTIFS = DateTime.Now;
                 return DeleteInvitation(inv);
             }
+<<<<<<< HEAD
             
+=======
+>>>>>>> d16d44270c4c53a4f0a78343f012c887d1f5bed9
         }
         public bool AddMemberToGroup(int id_groupe, int id_client)
         {
@@ -558,7 +561,7 @@ namespace serveur.Models
 
         public bool CreateFile(Fichier file)
         {
-            string query = "INSERT IGNORE INTO fichier(id_groupe_fk, nom) VALUES(@id_groupe_fk,@nom)";
+            string query = "INSERT INTO fichier(id_groupe_fk, nom) VALUES(@id_groupe_fk,@nom)";
             MySqlCommand cmd = new MySqlCommand(query);
             cmd.Parameters.AddWithValue("@id_groupe_fk", file.id_groupe_fk);
             cmd.Parameters.AddWithValue("@nom", file.nom);

@@ -55,9 +55,10 @@ namespace serveur
                 API api = new API();
                 bool success = false;
                 string fileToDelete = "";
-                if (f.id_fichier != 0)
+                Fichier fbd = api.GetFile(f.id_fichier);
+                if (fbd != null)
                 {
-                    Fichier fbd = api.GetFile(f.id_fichier);
+                    //Fichier fbd = api.GetFile(f.id_fichier);
                     if (fbd.nom != f.nom)
                     {
                         success = api.ModifyFile(f);

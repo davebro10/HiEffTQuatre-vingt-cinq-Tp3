@@ -49,10 +49,19 @@ namespace serveur
                 else if(response[0] == "UPLOAD")
                 {
                     DateTime dateTime = Convert.ToDateTime(response[1]);
-                    Console.WriteLine("First : " + dateTime + " " + "SECOND: " + Models.API.LAST_TIME_SYNC_FILES + "\n");
                     Send(udpClient, RemoteIpEndPoint, Models.API.LAST_TIME_SYNC_FILES, dateTime);
                 }
                 else if (response[0] == "DOWNLOAD")
+                {
+                    DateTime dateTime = Convert.ToDateTime(response[1]);
+                    Send(udpClient, RemoteIpEndPoint, dateTime, Models.API.LAST_TIME_SYNC_FILES);
+                }
+                else if (response[0] == "NOTIFICATION")
+                {
+                    DateTime dateTime = Convert.ToDateTime(response[1]);
+                    Send(udpClient, RemoteIpEndPoint, dateTime, Models.API.LAST_TIME_SYNC_FILES);
+                }
+                else if (response[0] == "GROUPE")
                 {
                     DateTime dateTime = Convert.ToDateTime(response[1]);
                     Send(udpClient, RemoteIpEndPoint, dateTime, Models.API.LAST_TIME_SYNC_FILES);

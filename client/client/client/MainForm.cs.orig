@@ -6,12 +6,15 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
+<<<<<<< Updated upstream
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+=======
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+>>>>>>> Stashed changes
 
 namespace client
 {
@@ -128,6 +131,15 @@ namespace client
         private async void SynchronizeFiles()
         {
             if (ActiveClient == null)
+<<<<<<< Updated upstream
+                return;
+
+            if (!Directory.Exists(ClientDirectoryName))
+                Directory.CreateDirectory(ClientDirectoryName);
+
+            var directories = Directory.GetDirectories(ClientDirectoryName);
+            foreach (var directory in directories)
+=======
             {
                 return;
             }
@@ -148,73 +160,52 @@ namespace client
                 }
             }
 
-            var directories = Directory.GetDirectories(ActiveClient.usager);
-            foreach (var directory in directories)
+
+            string[] dirs = Directory.GetDirectories(ActiveClient.usager);
+            for (int i = 0; i < dirs.Length; ++i)
+>>>>>>> Stashed changes
             {
-                var resultString = Regex.Match(directory, @"\d+").Value;
-                var groupId = int.Parse(resultString);
-
-                List<Fichier> files = await FichierAPI.GetFilesFromGroup(groupId);
-
-                /*// Manage delete files
-                
-                string[] AllFiles = Directory.GetFiles(directory);
-                for (int i = 0; i < AllFiles.Length; ++i)
-                {
-                    AllFiles[i] = (AllFiles[i].Split('\\')[2]);
-                }
-
-                List<Fichier> deletedFiles = new List<Fichier>();
-                for (int i = 0; i < files.Count; ++i)
-                {
-                    bool found = false;
-                    for (int j = 0; j < AllFiles.Length; ++j)
-                    {
-                        if (AllFiles[j] == files[i].nom)
-                        {
-                            found = true;
-                        }
-                    }
-
-                    if(!found)
-                    {
-                        deletedFiles.Add(files[i]);
-                    }
-                }
-
-                deletedFiles.ForEach( async (file) => await FichierAPI.DeleteFileAsync(file));*/
-
-
                 var directoryInfo = new DirectoryInfo(directory);
-                var sendData = Encoding.ASCII.GetBytes("UPLOAD" + ";" + directoryInfo.LastWriteTime);
+                var sendData = Encoding.ASCII.GetBytes("SENDFICHIER" + ";" + directoryInfo.LastWriteTime);
                 UDPClient.Send(sendData, sendData.Length);
 
+<<<<<<< Updated upstream
                 var receiveBytes = UDPClient.Receive(ref IP_ENDPOINT);
+                if (Encoding.ASCII.GetString(receiveBytes) != "YES")
+                    continue;
+=======
+                Byte[] senddata = Encoding.ASCII.GetBytes("UPLOAD" + ";" + dateTime);
+                UDPClient.Send(senddata, senddata.Length);
+>>>>>>> Stashed changes
 
+                var resultString = Regex.Match(directory, @"\d+").Value;
+                var groupId = int.Parse(resultString);
                 foreach (var file in Directory.GetFiles(directory))
                 {
+<<<<<<< Updated upstream
                     var parse = file.Split('\\');
-                    bool find = false;
-                    foreach (var f in files)
+                    await FichierAPI.Upload(File.ReadAllBytes(file), parse[2], groupId);
+                }
+            }
+
+=======
+                    string resultString = Regex.Match(dirs[i], @"\d+").Value;
+                    int groupID = int.Parse(resultString);
+                    string[] files = Directory.GetFiles(dirs[i]);
+                    for(int j = 0; j < files.Length; ++j)
                     {
-                        if (f.nom == parse[2])
-                        {
-                            find = true;
-                            await FichierAPI.Upload(File.ReadAllBytes(file), parse[2], groupId, f.id_fichier);
-                        }
-                    }
-                    if(!find)
-                    {
-                        await FichierAPI.Upload(File.ReadAllBytes(file), parse[2], groupId, 999999);
+                        byte[] bytes = File.ReadAllBytes(files[j]);
+                        string[] parse = files[j].Split('\\');
+                        await FichierAPI.Upload(bytes, parse[2], groupID);
                     }
                 } 
             }
 
-            directories = Directory.GetDirectories(ActiveClient.usager);
-            foreach (var directory in directories)
+            dirs = Directory.GetDirectories(ActiveClient.usager);
+            for (int i = 0; i < dirs.Length; ++i)
             {
-                var resultString = Regex.Match(directory, @"\d+").Value;
-                var groupId = int.Parse(resultString);
+                // DirectoryInfo info = new DirectoryInfo(dirs[i]);
+                //DateTime dateTime = info.LastWriteTime;
 
                 Byte[] senddata = Encoding.ASCII.GetBytes("DOWNLOAD" + ";" + LAST_TIME_SYNC_FILES);
                 UDPClient.Send(senddata, senddata.Length);
@@ -223,50 +214,26 @@ namespace client
                 string returnData = Encoding.ASCII.GetString(receiveBytes);
                 if (returnData == "YES")
                 {
+                    string resultString = Regex.Match(dirs[i], @"\d+").Value;
+                    int groupID = int.Parse(resultString);
 
-                    List<Fichier> files = await FichierAPI.GetFilesFromGroup(groupId);
-                    string[] AllFiles = Directory.GetFiles(directory);
-                    
+                    List<Fichier> files = await FichierAPI.GetFilesFromGroup(groupID);
+
                     for (int j = 0; j < files.Count; ++j)
                     {
 
-                        byte[] stream = await FichierAPI.Download(files[j].id_fichier);
-                        try
+                        byte[] stream = await FichierAPI.Download(files[i].id_fichier);
+                        using (var ms = new MemoryStream(stream))
                         {
-                            File.WriteAllBytes(directory + "/" + files[j].nom, stream);
-                        } catch(Exception e)
-                        {
-
+                            var img = Image.FromStream(ms);
+                            img.Save(dirs[i] + "/" + files[i].nom, ImageFormat.Jpeg);
                         }
+
                     }
-
-                    /*files = await FichierAPI.GetFilesFromGroup(groupId);
-                    AllFiles = Directory.GetFiles(directory);
-
-                    for (int i = 0; i < AllFiles.Length; ++i)
-                    {
-                        AllFiles[i] = (AllFiles[i].Split('\\')[2]);
-                    }
-
-
-                    for (int i = 0; i < AllFiles.Length; ++i)
-                    {
-                        bool found = false;
-                        files.ForEach((file) => {
-                            if (file.nom == AllFiles[i])
-                            {
-                                found = true;
-                            }
-                        });
-
-                        if (!found)
-                        {
-                            File.Delete(Directory.GetFiles(directory)[i]);
-                        }
-                    }*/
                 }
 
             }
+>>>>>>> Stashed changes
 
         }
 
