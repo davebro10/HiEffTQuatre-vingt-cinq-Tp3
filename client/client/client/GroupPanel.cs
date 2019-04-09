@@ -116,6 +116,9 @@ namespace client
             if (!(MemberListBox.SelectedItem is Client selectedClient))
                 return;
 
+            if (selectedClient.id_client == ActiveGroup.admin)
+                return;
+
             await InvitationAPI.RemoveMemberToGroupAsync(selectedClient.id_client, ActiveGroup.id_groupe);
             Synchronize();
         }
