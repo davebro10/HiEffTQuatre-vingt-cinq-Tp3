@@ -18,6 +18,11 @@ namespace client
             //UpdateValues();
         }
 
+        public void UpdateClient()
+        {
+            NomClientLabel.Text = ActiveClient?.nom ?? "Anonyme";
+        }
+
         public void UpdateValues()
         {
             MainForm.LAST_TIME_SYNC_CLIENTS = DateTime.Now;

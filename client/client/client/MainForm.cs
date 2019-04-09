@@ -81,6 +81,7 @@ namespace client
                 switch (_panel)
                 {
                     case Panel.Home:
+                        _homePanel.UpdateClient();
                         ActivePanel.Controls.Add(_homePanel);
                         break;
                     case Panel.Groupe:
