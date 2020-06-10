@@ -13,6 +13,7 @@ namespace client
         {
             InitializeComponent();
             Dock = DockStyle.Fill;
+
         }
 
         public override void Synchronize()

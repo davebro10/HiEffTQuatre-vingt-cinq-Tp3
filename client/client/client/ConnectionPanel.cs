@@ -39,7 +39,7 @@ namespace client
                 ErrorMessage.Text = "Informations de connexion erronées.";
                 UserTextBox.Text = "";
                 PasswordTextBox.Text = "";
-                UserTextBox.Focus();
+                UserTextBox.Focus(); 
             }
         }
 
